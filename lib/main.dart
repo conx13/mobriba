@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'rKood',
       debugShowCheckedModeBanner: false,
       onGenerateRoute: CustomRouter.onGenerateRoute,
-      initialRoute: RoutePaths.Home,
+      initialRoute: RoutePaths.home,
     );
   }
 }

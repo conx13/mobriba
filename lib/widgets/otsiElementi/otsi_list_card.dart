@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mobriba/screens/otsi/elemendi_info_page.dart';
-import 'package:mobriba/services/api.dart';
 
 class OtsiListCard extends StatelessWidget {
-  int tulem;
-  int jid;
-  String tiitel;
-  String subtiitel;
-  String gnimi;
+  final int tulem;
+  final int jid;
+  final String tiitel;
+  final String subtiitel;
+  final double kogus;
 
   final BuildContext context;
-  OtsiListCard(this.tulem, this.jid, this.tiitel, this.subtiitel, this.gnimi,
-      this.context,
+  const OtsiListCard(this.tulem, this.jid, this.tiitel, this.subtiitel,
+      this.kogus, this.context,
       {Key? key})
       : super(key: key);
 
@@ -62,20 +61,20 @@ class OtsiListCard extends StatelessWidget {
     return Card(
       shape: kaardiVarv(),
       child: ListTile(
-        leading: ikoon(),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ElemendiInfoPage(jid)),
+          );
+        },
+        dense: false,
+        leading: Column(
+            mainAxisAlignment: MainAxisAlignment.center, children: [ikoon()]),
         title: Text(tiitel),
         // Kui võtta el nimetus välja:
         //title: Text(_otsiTulem[index].too.split('_').last),
         subtitle: Text(subtiitel),
-        trailing: IconButton(
-          icon: Icon(Icons.file_open),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ElemendiInfoPage(jid)),
-            );
-          },
-        ),
+        trailing: Text('$kogus m2'),
       ),
     );
   }

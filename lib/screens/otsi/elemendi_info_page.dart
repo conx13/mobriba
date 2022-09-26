@@ -21,9 +21,9 @@ extension Iterables<E> on Iterable<E> {
 }
 
 class ElemendiInfoPage extends StatefulWidget {
-  int jid;
+  final int jid;
 
-  ElemendiInfoPage(this.jid, {Key? key}) : super(key: key);
+  const ElemendiInfoPage(this.jid, {Key? key}) : super(key: key);
 
   @override
   State<ElemendiInfoPage> createState() => _ElemendiInfoState();
@@ -31,12 +31,15 @@ class ElemendiInfoPage extends StatefulWidget {
 
 class _ElemendiInfoState extends State<ElemendiInfoPage> {
   String _nimetus = 'Otsib...';
-  String _grupp = 'Otsib...';
+  String _gnimi = 'Otsib...';
+  String _leping = '...';
   double? _m2 = 0.0;
   String _aeg = '00:00';
   String _tulemus = '0,0 m2/h';
   final String _keskmineAeg = '0.0';
   bool isLoadedKesTegi = false;
+  bool kesTegiErr = false;
+  bool statsTyhi = false;
 
   List<KesTegi> _kesTegiList = [];
   Map<Object, List<KesTegi>> _kesTegiGrupp = {};
@@ -44,8 +47,8 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
   List<ElemStats> _elemStats = [];
 
   // Erinevate teadete näitamiseks
-  teated(String txt, bool err, cont) {
-    ScaffoldMessenger.of(cont).showSnackBar(SnackBar(
+  teated(String txt, bool err) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(txt),
       backgroundColor: err
           ? Theme.of(context).errorColor
@@ -84,7 +87,10 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
         isLoadedKesTegi = false;
       });
     } catch (e) {
-      teated('Error!', true, context);
+      setState(() {
+        kesTegiErr = true;
+        isLoadedKesTegi = false;
+      });
       log(e.toString(), name: 'Error Kest tegi');
     }
   }
@@ -95,7 +101,9 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
       _elemInfo = await api.elemendiInfo(jid);
       setState(() {
         _nimetus = _elemInfo.first.job;
-        _grupp = _elemInfo.first.ggrupp;
+        _leping = _elemInfo.first.lepnr;
+        _gnimi = _elemInfo.first.gnimi;
+        _m2 = _elemInfo.first.kogus;
       });
       //log(elemInfoToJson(_elemInfo), name: 'Elemendi info');
     } catch (e) {
@@ -107,11 +115,16 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
   getElemendiStats(int jid) async {
     try {
       _elemStats = await api.elemendiStats(jid);
-      arvutaAeg(_elemStats.first.result ?? 0);
-      setState(() {
-        _m2 = _elemStats.first.kogus!;
-      });
-      arvutaKiirus(_elemStats.first.result ?? 0, _m2!);
+      if (_elemStats.isEmpty) {
+        setState(() {
+          statsTyhi = true;
+        });
+      } else {
+        setState(() {
+          arvutaAeg(_elemStats.first.result ?? 0);
+          arvutaKiirus(_elemStats.first.result ?? 0, _m2!);
+        });
+      }
     } catch (e) {
       log(e.toString(), name: 'Elemendi stats Error!');
     }
@@ -136,13 +149,26 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
             AppBar(
               title: const Text('otsing'),
             ),
-            ElemPais(nimetus: _nimetus, grupp: _grupp, m2: _m2),
-            TextButton(
-              child: Text('text'),
-              onPressed: () => ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text('Hello!'))),
+            ElemPais(
+              nimetus: _nimetus,
+              grupp: _gnimi,
+              m2: _m2,
+              leping: _leping,
             ),
-            Stats(aeg: _aeg, tulemus: _tulemus, keskmineAeg: _keskmineAeg),
+            Visibility(
+              visible: statsTyhi,
+              child: Text(
+                'Ei ole töösse võetud!',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(color: Colors.redAccent),
+              ),
+            ),
+            Visibility(
+                visible: !statsTyhi,
+                child: Stats(
+                    aeg: _aeg, tulemus: _tulemus, keskmineAeg: _keskmineAeg)),
             Expanded(
                 child: !isLoadedKesTegi
                     ? kesTegiList(_kesTegiGrupp)
@@ -163,8 +189,7 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
         return Card(
           clipBehavior: Clip.hardEdge,
           child: ExpansionTile(
-            onExpansionChanged: (value) => ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('Hello!'))),
+            childrenPadding: const EdgeInsets.only(bottom: 10),
             //tilePadding: EdgeInsets.all(10),
             leading: AvatarPilt(listGrupp[nimi]),
             title: Text(nimi),
@@ -176,7 +201,7 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
                           DateFormat('dd.MM.yy').format(e.start!),
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 50,
                         ),
                         e.stop != null

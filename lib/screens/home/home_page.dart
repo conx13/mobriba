@@ -3,7 +3,7 @@ import 'package:mobriba/enums/bottom_nav_item.dart';
 import 'package:mobriba/widgets/home/tab_navigator.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();

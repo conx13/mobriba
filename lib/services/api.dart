@@ -24,7 +24,7 @@ Future getTanaTool() async {
   List<Aktiivsed> aktiivsedList = [];
   aktiivsedList.add(Aktiivsed.fromJson(json.decode(results[0])));
   aktiivsedList.add(Aktiivsed.fromJson(json.decode(results[1])));
-  log(aktiivsedList.toString(), name: 'http vastus');
+  //log(aktiivsedList.toString(), name: 'http vastus');
   return aktiivsedList;
 }
 
@@ -72,7 +72,7 @@ Future getTootajaGrupp() async {
   log('getTootajaGrupp', name: 'GetTootajadGrupp');
   var result = await getData('/rkood/tootajagrupid')
       .then((value) => tootajagruppFromJson(value));
-  log(tootajagruppToJson(result), name: 'TOOTAJAGRUPP');
+  //log(tootajagruppToJson(result), name: 'TOOTAJAGRUPP');
   return result;
 }
 
@@ -105,6 +105,7 @@ Future<List<KesTegi>> kesTegi(int jid) async {
   var result = await getData('/rkood/kestegi/$jid')
       .then((value) => kesTegiFromJson(value));
   if (result.isEmpty) {
+    log('Kes tegi tühi');
     throw Exception("Ei ole andmeid!");
   } else {
     return result;
@@ -117,7 +118,7 @@ Future<List<KesTegi>> kesTegi(int jid) async {
 Future<List<ElemInfo>> elemendiInfo(int jid) async {
   var result = await getData('/rkood/eleminfo/$jid')
       .then((value) => elemInfoFromJson(value));
-  //log(elemInfoToJson(result), name: 'Elemendi info');
+  log(elemInfoToJson(result), name: 'Elemendi info');
   return result;
 }
 

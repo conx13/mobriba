@@ -19,7 +19,7 @@ String username = 'matek';
 String password = '123£-UYh4-8UXx';
 String basicAuth = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
 
-Map<String, String> http_pais = {
+Map<String, String> httpPais = {
   "Access-Control-Allow-Origin": '*',
   'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE, HEAD',
   'Access-Control-Allow-Credentials': 'true',
@@ -32,13 +32,13 @@ Map<String, String> http_pais = {
 /*                             Tavaline GET päring                            */
 /* -------------------------------------------------------------------------- */
 Future getData(String data) async {
-  log(Uri.parse(Uri.encodeFull('$url$data')).toString(), name: 'HTTP url:');
+  //log(Uri.parse(Uri.encodeFull('$url$data')).toString(), name: 'HTTP url:');
   final response =
-      await get(Uri.parse(Uri.encodeFull('$url$data')), headers: http_pais)
+      await get(Uri.parse(Uri.encodeFull('$url$data')), headers: httpPais)
           .timeout(const Duration(seconds: 40),
               onTimeout: () => Response('Timeout', 408));
   if (response.statusCode == 200) {
-    log(response.body.toString(), name: 'HTTP service:');
+    // log(response.body.toString(), name: 'HTTP service:');
     return ((response.body));
   } else {
     log('http ERROR: ${response.body}', name: 'HTTP service error');
@@ -50,7 +50,7 @@ Future getData(String data) async {
 /*                               Tavaline delete                              */
 /* -------------------------------------------------------------------------- */
 Future delData(String data) async {
-  final response = await delete(Uri.parse('$url$data'), headers: http_pais)
+  final response = await delete(Uri.parse('$url$data'), headers: httpPais)
       .timeout(const Duration(seconds: 20),
           onTimeout: () => Response('Timeout', 408));
   if (response.statusCode == 200) {
@@ -69,7 +69,7 @@ Future postPicture(picture, tid) async {
   var request = MultipartRequest('POST', Uri.parse('$url/users/editpic/$tid'))
     ..files.add(await MultipartFile.fromPath('pilt', picture,
         contentType: MediaType('image', 'jpeg')))
-    ..headers.addAll(http_pais);
+    ..headers.addAll(httpPais);
   var response = await request.send();
   if (response.statusCode != 200) {
     throw Exception("Miskit läks päringuga valesti!");

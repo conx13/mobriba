@@ -6,11 +6,11 @@ import 'package:mobriba/services/http_service.dart';
 
 class UserPilt extends StatefulWidget {
   @required
-  String userPilt = '';
+  final String userPilt;
   final String nimeTahed;
   final int tid;
 
-  UserPilt(this.userPilt, this.nimeTahed, this.tid, {Key? key})
+  const UserPilt(this.userPilt, this.nimeTahed, this.tid, {Key? key})
       : super(key: key);
 
   @override
@@ -35,6 +35,13 @@ posSnackBar(String teade, context) {
 
 class _UserPiltState extends State<UserPilt> {
   bool _piltLaeb = false;
+  String pilt = '';
+
+  @override
+  void initState() {
+    super.initState();
+    pilt = widget.userPilt;
+  }
 
 // Muudame pilt ja võtame pildi galeriist
   Future valiPilt() async {
@@ -44,7 +51,7 @@ class _UserPiltState extends State<UserPilt> {
       setState(() {
         _piltLaeb = true;
       });
-      widget.userPilt = await postPicture(image.path, widget.tid);
+      pilt = await postPicture(image.path, widget.tid);
       setState(() {
         _piltLaeb = false;
       });
@@ -67,7 +74,7 @@ class _UserPiltState extends State<UserPilt> {
       await delPilt(pilt);
       setState(() {
         _piltLaeb = false;
-        widget.userPilt = '';
+        pilt = '';
       });
       if (!mounted) return;
       posSnackBar('Pilt on kustutatud!', context);
@@ -135,7 +142,7 @@ class _UserPiltState extends State<UserPilt> {
   Widget naitaPilti(context) {
     if (_piltLaeb) {
       return const CircularProgressIndicator();
-    } else if (widget.userPilt == '') {
+    } else if (pilt == '') {
       return Text(
         widget.nimeTahed,
         style: Theme.of(context).textTheme.displayMedium,
@@ -143,8 +150,7 @@ class _UserPiltState extends State<UserPilt> {
     } else {
       return CircleAvatar(
         radius: 60,
-        backgroundImage:
-            NetworkImage('$url/pics/${widget.userPilt}', headers: http_pais),
+        backgroundImage: NetworkImage('$url/pics/$pilt', headers: httpPais),
       );
     }
   }
@@ -167,7 +173,7 @@ class _UserPiltState extends State<UserPilt> {
         ),
         TextButton.icon(
           onPressed: () {
-            kustutaPilt(widget.userPilt);
+            kustutaPilt(pilt);
             Navigator.pop(context);
           },
           icon: const Icon(Icons.delete),

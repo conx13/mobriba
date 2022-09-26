@@ -15,6 +15,7 @@ class OtsiToodGrupp {
   String lepnr;
   String too;
   int jid;
+  double kogus;
   String gnimi;
   bool ontoos;
   bool onresult;
@@ -24,6 +25,7 @@ class OtsiToodGrupp {
       {required this.lepnr,
       required this.too,
       required this.jid,
+      required this.kogus,
       required this.gnimi,
       required this.ontoos,
       required this.onresult,
@@ -38,6 +40,7 @@ class OtsiToodGrupp {
         lepnr: json["LEPNR"],
         too: json["TOO"],
         jid: json["JID"],
+        kogus: json["KOGUS"],
         gnimi: json["GNIMI"],
         ontoos: json["ontoos"] == 0 ? false : true,
         onresult: json["onresult"] == 0 ? false : true,
@@ -47,6 +50,7 @@ class OtsiToodGrupp {
         "LEPNR": lepnr,
         "TOO": too,
         "JID": jid,
+        "KOGUS": kogus,
         "GNIMI": gnimi,
         "ontoos": ontoos,
         "onresult": onresult,

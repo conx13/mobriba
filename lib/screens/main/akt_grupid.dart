@@ -20,8 +20,8 @@ extension MyIterable<E> on Iterable<E> {
 }
 
 class AktGrupidScreen extends StatefulWidget {
-  String ggrupp;
-  AktGrupidScreen(this.ggrupp, {Key? key}) : super(key: key);
+  final String ggrupp;
+  const AktGrupidScreen(this.ggrupp, {Key? key}) : super(key: key);
 
   @override
   State<AktGrupidScreen> createState() => _AktGrupidScreenState();
@@ -63,23 +63,20 @@ class _AktGrupidScreenState extends State<AktGrupidScreen> {
           title: Text(widget.ggrupp),
           //backgroundColor: Theme.of(context).secondaryHeaderColor,
         ),
-        bottomNavigationBar: Container(
-          //color: Theme.of(context).colorScheme.primary,
-          child: const TabBar(
-            indicatorPadding: EdgeInsets.all(5.0),
-            indicatorColor: Colors.grey,
-            labelColor: Colors.grey,
-            tabs: [
-              Tab(
-                icon: Icon(Icons.group),
-                //text: 'Töötajad',
-              ),
-              Tab(
-                icon: Icon(Icons.apps),
-                //text: 'Tööd',
-              ),
-            ],
-          ),
+        bottomNavigationBar: const TabBar(
+          indicatorPadding: EdgeInsets.all(5.0),
+          indicatorColor: Colors.grey,
+          labelColor: Colors.grey,
+          tabs: [
+            Tab(
+              icon: Icon(Icons.group),
+              //text: 'Töötajad',
+            ),
+            Tab(
+              icon: Icon(Icons.apps),
+              //text: 'Tööd',
+            ),
+          ],
         ),
         body: TabBarView(
           children: [

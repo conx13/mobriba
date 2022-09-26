@@ -3,11 +3,11 @@ import '../../screens/main/puuduvad.dart';
 
 class KokkuTool extends StatelessWidget {
   @required
-  String aktiivsedKokku = '0';
+  final String aktiivsedKokku;
   @required
-  String mitteAktiivsedKokku = '0';
+  final String mitteAktiivsedKokku;
 
-  KokkuTool(this.aktiivsedKokku, this.mitteAktiivsedKokku, {Key? key})
+  const KokkuTool(this.aktiivsedKokku, this.mitteAktiivsedKokku, {Key? key})
       : super(key: key);
 
   @override

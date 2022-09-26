@@ -18,7 +18,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tanaKokku = getTanaTool();
     _tanaToolList = getTanaToolList();
@@ -28,7 +27,8 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
+        child: RefreshIndicator(
+          onRefresh: _onRefresh,
           child: Column(
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -78,7 +78,7 @@ class _MainPageState extends State<MainPage> {
                               child: CircularProgressIndicator());
                         }
                         if (snapshot.hasError) {
-                          log(snapshot.error.toString(), name: 'Kodu2');
+                          log(snapshot.error.toString(), name: 'Kodu2 ERROR');
                           return const Center(
                             child: Text('ERROR'),
                           );
@@ -95,5 +95,13 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _onRefresh() async {
+    setState(() {
+      _tanaKokku = getTanaTool();
+      _tanaToolList = getTanaToolList();
+      //log('REFRESH', name: 'kodu3');
+    });
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mobriba/models/otsiElementi/otsi_koodi_list_model.dart';
 import 'package:mobriba/widgets/otsiElementi/otsi_koodi_form.dart';
@@ -84,7 +83,7 @@ class _OtsiKoodiPageState extends State<OtsiKoodiPage> {
                           _otsiTulem[index].jid,
                           _otsiTulem[index].too,
                           _otsiTulem[index].lepnr,
-                          _otsiTulem[index].gnimi,
+                          _otsiTulem[index].kogus,
                           context);
                     })),
               )

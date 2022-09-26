@@ -14,10 +14,10 @@ class CustomRouter {
             settings: const RouteSettings(name: '/'),
             builder: (_) => const Scaffold());
 
-      case RoutePaths.Home:
+      case RoutePaths.home:
         return CupertinoPageRoute(
-            builder: (context) => HomePage(),
-            settings: const RouteSettings(name: RoutePaths.Home));
+            builder: (context) => const HomePage(),
+            settings: const RouteSettings(name: RoutePaths.home));
 
       default:
         return _errorRoute();
@@ -25,7 +25,6 @@ class CustomRouter {
   }
 
   static Route onGenerateNestedRoute(RouteSettings settings) {
-    print('Nested Route: ${settings.name}');
     // this is where you define the nested routes.
     switch (settings.name) {
       default:

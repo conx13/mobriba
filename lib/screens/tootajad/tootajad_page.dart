@@ -7,9 +7,7 @@ class Tootajad extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: FlatButton(
-          color: Colors.blue,
-          textColor: Colors.white,
+        child: TextButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => Scaffold(

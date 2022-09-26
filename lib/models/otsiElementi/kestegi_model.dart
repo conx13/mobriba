@@ -3,7 +3,6 @@
 //     final kesTegi = kesTegiFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:intl/intl.dart';
 
 List<KesTegi> kesTegiFromJson(String str) =>
     List<KesTegi>.from(json.decode(str).map((x) => KesTegi.fromJson(x)));

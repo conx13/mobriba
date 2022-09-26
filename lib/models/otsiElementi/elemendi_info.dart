@@ -17,6 +17,7 @@ class ElemInfo {
     required this.kogus,
     required this.markus,
     required this.ggrupp,
+    required this.gnimi,
     required this.jid,
   });
 
@@ -25,6 +26,7 @@ class ElemInfo {
   double? kogus;
   dynamic markus;
   String ggrupp;
+  String gnimi;
   int jid;
 
   factory ElemInfo.fromJson(Map<String, dynamic> json) => ElemInfo(
@@ -33,6 +35,7 @@ class ElemInfo {
         kogus: json["KOGUS"] == null ? 0 : json["KOGUS"].toDouble(),
         markus: json["Markus"],
         ggrupp: json["GGRUPP"],
+        gnimi: json["GNIMI"],
         jid: json["JID"],
       );
 
@@ -42,6 +45,7 @@ class ElemInfo {
         "KOGUS": kogus,
         "Markus": markus,
         "GGRUPP": ggrupp,
+        "GNIMI": gnimi,
         "JID": jid,
       };
 }

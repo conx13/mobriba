@@ -8,10 +8,10 @@ import 'package:mobriba/widgets/tootajad/user_pilt.dart';
 
 class UserPage extends StatefulWidget {
   @required
-  int tid;
-  String nimi;
+  final int tid;
+  final String nimi;
 
-  UserPage(this.tid, this.nimi, {Key? key}) : super(key: key);
+  const UserPage(this.tid, this.nimi, {Key? key}) : super(key: key);
 
   @override
   State<UserPage> createState() => _UserPageState();

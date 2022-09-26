@@ -1,5 +1,5 @@
 class RoutePaths {
-  static const String Splash = '/splash';
-  static const String Home = '/home';
-  static const String Otsi = '/home';
+  static const String splash = '/splash';
+  static const String home = '/home';
+  static const String otsi = '/home';
 }

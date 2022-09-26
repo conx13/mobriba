@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobriba/config/custom_router.dart';
 import 'package:mobriba/enums/bottom_nav_item.dart';
 import 'package:mobriba/screens/main/main_page.dart';
-import 'package:mobriba/screens/otsi/otsi_element_page.dart';
 import 'package:mobriba/screens/otsi/otsi_koodi_page.dart';
 import 'package:mobriba/screens/tootajad/tootajad_page.dart';
 

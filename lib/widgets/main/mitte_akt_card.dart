@@ -3,11 +3,12 @@ import 'package:mobriba/screens/tootajad/tootaja_page.dart';
 
 class MitteAktCard extends StatelessWidget {
   @required
-  String nimi = '';
-  String grupp = '';
-  int tid;
+  final String nimi;
+  final String grupp;
+  final int tid;
 
-  MitteAktCard(this.nimi, this.grupp, this.tid, {Key? key}) : super(key: key);
+  const MitteAktCard(this.nimi, this.grupp, this.tid, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

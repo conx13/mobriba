@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class AktGruppCard extends StatelessWidget {
   @required
-  String nimi = '';
-  String leping = '';
-  String job = '';
-  String start;
+  final String nimi;
+  final String leping;
+  final String job;
+  final String start;
 
-  AktGruppCard(this.nimi, this.leping, this.job, this.start, {Key? key})
+  const AktGruppCard(this.nimi, this.leping, this.job, this.start, {Key? key})
       : super(key: key);
 
   @override
@@ -17,7 +17,8 @@ class AktGruppCard extends StatelessWidget {
       margin: const EdgeInsets.all(2),
       child: ListTile(
         //contentPadding: const EdgeInsetsDirectional.fromSTEB(10, 4, 10, 0),
-        leading: CircleAvatar(
+        // TODO pane iia pilt kui on
+        leading: const CircleAvatar(
           child: Text('AA'),
         ),
         title: Text(

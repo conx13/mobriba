@@ -3,8 +3,8 @@ import 'package:mobriba/screens/main/akt_grupid.dart';
 
 class AktiivsedList extends StatelessWidget {
   @required
-  List aktlist = [];
-  AktiivsedList(this.aktlist, {Key? key}) : super(key: key);
+  final List aktlist;
+  const AktiivsedList(this.aktlist, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

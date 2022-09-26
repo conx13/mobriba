@@ -3,13 +3,13 @@ import 'package:mobriba/models/main/tana_grupid.dart';
 
 class AktGruppTooCard extends StatelessWidget {
   @required
-  String elemGrupp;
-  String lepNr;
-  String startAeg;
-  double kokkuM2;
-  List<Grupp>? grupiTootajad;
+  final String elemGrupp;
+  final String lepNr;
+  final String startAeg;
+  final double kokkuM2;
+  final List<Grupp>? grupiTootajad;
 
-  AktGruppTooCard(this.elemGrupp, this.lepNr, this.kokkuM2, this.startAeg,
+  const AktGruppTooCard(this.elemGrupp, this.lepNr, this.kokkuM2, this.startAeg,
       this.grupiTootajad,
       {Key? key})
       : super(key: key);
