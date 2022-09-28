@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/screens/main/akt_grupid.dart';
+import '../../screens/main/akt_grupid.dart';
 
 class AktiivsedList extends StatelessWidget {
   @required

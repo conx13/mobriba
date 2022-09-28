@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobriba/services/api.dart';
-import 'package:mobriba/services/http_service.dart';
+import '../../services/api.dart';
+import '../../services/http_service.dart';
 
 class UserPilt extends StatefulWidget {
   @required
@@ -17,30 +17,30 @@ class UserPilt extends StatefulWidget {
   State<UserPilt> createState() => _UserPiltState();
 }
 
-// Negatiivne teade
-negSnackBar(String teade, context) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    backgroundColor: Theme.of(context).errorColor,
-    content: Text(teade),
-  ));
-}
-
-// Positiivne teade
-posSnackBar(String teade, context) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    backgroundColor: Colors.green,
-    content: Text(teade),
-  ));
-}
-
 class _UserPiltState extends State<UserPilt> {
   bool _piltLaeb = false;
-  String pilt = '';
+  String _pilt = '';
 
   @override
   void initState() {
     super.initState();
-    pilt = widget.userPilt;
+    _pilt = widget.userPilt;
+  }
+
+// Negatiivne teade
+  negSnackBar(String teade) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Theme.of(context).errorColor,
+      content: Text(teade),
+    ));
+  }
+
+// Positiivne teade
+  posSnackBar(String teade) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.green,
+      content: Text(teade),
+    ));
   }
 
 // Muudame pilt ja võtame pildi galeriist
@@ -51,35 +51,35 @@ class _UserPiltState extends State<UserPilt> {
       setState(() {
         _piltLaeb = true;
       });
-      pilt = await postPicture(image.path, widget.tid);
+      _pilt = await postPicture(image.path, widget.tid);
       setState(() {
         _piltLaeb = false;
       });
       // Igaksjuhuks kontrollime kas on mounted
       if (!mounted) return;
-      posSnackBar('Pilt on muudetud', context);
+      posSnackBar('Pilt on muudetud');
     } catch (e) {
-      negSnackBar('Pildi muutmine nurjus!', context);
+      negSnackBar('Pildi muutmine nurjus!');
       log('Pildi muutmine nurjus: $e');
     }
   }
 
 // Kustutame pildi
-  Future kustutaPilt(String pilt) async {
+  Future kustutaPilt(String photo) async {
     try {
-      if (pilt == '') return;
+      if (photo == '') return;
       setState(() {
         _piltLaeb = true;
       });
-      await delPilt(pilt);
+      await delPilt(photo);
       setState(() {
+        _pilt = '';
         _piltLaeb = false;
-        pilt = '';
       });
       if (!mounted) return;
-      posSnackBar('Pilt on kustutatud!', context);
+      posSnackBar('Pilt on kustutatud!');
     } catch (e) {
-      negSnackBar('Pildi muutmine nurjus!', context);
+      negSnackBar('Pildi muutmine nurjus!');
       log('Pildi muutmine nurjus: $e');
     }
   }
@@ -109,7 +109,7 @@ class _UserPiltState extends State<UserPilt> {
                   ],
                   shape: BoxShape.circle,
                 ),
-                child: naitaPilti(context)),
+                child: naitaPilti(_pilt)),
             Positioned(
               bottom: 0,
               right: 0,
@@ -123,6 +123,7 @@ class _UserPiltState extends State<UserPilt> {
                       builder: ((context) => muudaPilti(context)));
                 }),
                 style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
                   fixedSize: const Size(30, 30),
                   side: BorderSide(
                       width: 2,
@@ -139,10 +140,10 @@ class _UserPiltState extends State<UserPilt> {
   }
 
 // Vastavalt kas on pilt ja kas laeb pilti, näitab pilti või infot
-  Widget naitaPilti(context) {
+  Widget naitaPilti(photo) {
     if (_piltLaeb) {
       return const CircularProgressIndicator();
-    } else if (pilt == '') {
+    } else if (photo == '') {
       return Text(
         widget.nimeTahed,
         style: Theme.of(context).textTheme.displayMedium,
@@ -150,7 +151,7 @@ class _UserPiltState extends State<UserPilt> {
     } else {
       return CircleAvatar(
         radius: 60,
-        backgroundImage: NetworkImage('$url/pics/$pilt', headers: httpPais),
+        backgroundImage: NetworkImage('$url/pics/$photo', headers: httpPais),
       );
     }
   }
@@ -158,7 +159,30 @@ class _UserPiltState extends State<UserPilt> {
   //Pildi muutmise dialoog
   Widget muudaPilti(BuildContext context) {
     return AlertDialog(
-      title: const Text('Kas soovid muuta pilti?'),
+      titlePadding: const EdgeInsets.all(0),
+      //actionsAlignment: MainAxisAlignment.spaceEvenly,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              icon: const Icon(
+                Icons.close,
+                color: Colors.red,
+                size: 25,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          const Center(
+            child: Text('Kas soovid muuta pilti?'),
+          )
+        ],
+      ),
+      //title: const Text('Kas soovid muuta pilti?'),
       actions: [
         TextButton.icon(
           onPressed: () {
@@ -173,7 +197,7 @@ class _UserPiltState extends State<UserPilt> {
         ),
         TextButton.icon(
           onPressed: () {
-            kustutaPilt(pilt);
+            kustutaPilt(_pilt);
             Navigator.pop(context);
           },
           icon: const Icon(Icons.delete),

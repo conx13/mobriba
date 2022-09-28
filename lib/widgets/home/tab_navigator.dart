@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/config/custom_router.dart';
-import 'package:mobriba/enums/bottom_nav_item.dart';
-import 'package:mobriba/screens/main/main_page.dart';
-import 'package:mobriba/screens/otsi/otsi_koodi_page.dart';
-import 'package:mobriba/screens/tootajad/tootajad_page.dart';
+import '../../config/custom_router.dart';
+import '../../enums/bottom_nav_item.dart';
+import '../../screens/main/main_page.dart';
+import '../../screens/otsi/otsi_koodi_page.dart';
+import '../../screens/tootajad/tootajad_page.dart';
 
 class TabNavigator extends StatelessWidget {
   static const String tabNavigatorRoot = '/';

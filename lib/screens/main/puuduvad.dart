@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/models/main/aktiivsed_model.dart';
-import 'package:mobriba/services/api.dart';
-import 'package:mobriba/widgets/main/mitte_akt_card.dart';
+import '../../models/main/aktiivsed_model.dart';
+import '../../services/api.dart';
+import '../../widgets/main/mitte_akt_card.dart';
 
 //TODO vaja edasi teha
 

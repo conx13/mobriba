@@ -1,5 +1,5 @@
-import 'package:mobriba/config/custom_router.dart';
-import 'package:mobriba/config/route_paths.dart';
+import '../../config/custom_router.dart';
+import '../../config/route_paths.dart';
 import 'package:flutter/material.dart';
 
 void main() {

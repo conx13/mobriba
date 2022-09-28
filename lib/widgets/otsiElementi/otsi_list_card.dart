@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/screens/otsi/elemendi_info_page.dart';
+import '../../screens/otsi/elemendi_info_page.dart';
 
 class OtsiListCard extends StatelessWidget {
   final int tulem;
   final int jid;
   final String tiitel;
   final String subtiitel;
-  final double kogus;
+  final num kogus;
 
   final BuildContext context;
   const OtsiListCard(this.tulem, this.jid, this.tiitel, this.subtiitel,

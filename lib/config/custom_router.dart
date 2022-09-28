@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobriba/config/route_paths.dart';
-import 'package:mobriba/screens/home/home_page.dart';
+import '../../config/route_paths.dart';
+import '../../screens/home/home_page.dart';
 
 class CustomRouter {
   static Route onGenerateRoute(RouteSettings settings) {

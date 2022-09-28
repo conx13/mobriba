@@ -1,9 +1,9 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:mobriba/services/api.dart';
-import 'package:mobriba/widgets/main/aktiivsed_list.dart';
-import 'package:mobriba/widgets/main/kokku_tool.dart';
+
+import '../../services/api.dart';
+import '../../widgets/main/aktiivsed_list.dart';
+import '../../widgets/main/kokku_tool.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);

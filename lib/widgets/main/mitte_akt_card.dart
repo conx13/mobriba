@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/screens/tootajad/tootaja_page.dart';
+import '../../screens/tootajad/tootaja_page.dart';
 
 class MitteAktCard extends StatelessWidget {
   @required
@@ -18,7 +18,7 @@ class MitteAktCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => UserPage(tid, nimi),
+              builder: (context) => UserPage(tid),
             ),
           );
         },

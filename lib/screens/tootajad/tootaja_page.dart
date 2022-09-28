@@ -1,17 +1,16 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:mobriba/models/main/tootaja_grupp.dart';
-import 'package:mobriba/models/tootajad/user_model.dart';
-import 'package:mobriba/services/api.dart';
-import 'package:mobriba/widgets/main/text_input.dart';
-import 'package:mobriba/widgets/tootajad/user_pilt.dart';
+import '../../models/main/tootaja_grupp.dart';
+import '../../models/tootajad/user_model.dart';
+import '../../services/api.dart';
+import '../../widgets/main/text_input.dart';
+import '../../widgets/tootajad/user_pilt.dart';
 
 class UserPage extends StatefulWidget {
   @required
   final int tid;
-  final String nimi;
 
-  const UserPage(this.tid, this.nimi, {Key? key}) : super(key: key);
+  const UserPage(this.tid, {Key? key}) : super(key: key);
 
   @override
   State<UserPage> createState() => _UserPageState();
@@ -40,8 +39,8 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void initState() {
-    getKasutaja();
     super.initState();
+    getKasutaja();
     minuFookus = FocusNode();
   }
 

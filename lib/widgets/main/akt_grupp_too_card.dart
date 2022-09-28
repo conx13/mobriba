@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/models/main/tana_grupid.dart';
+import '../../models/main/tana_grupid.dart';
 
 class AktGruppTooCard extends StatelessWidget {
   @required

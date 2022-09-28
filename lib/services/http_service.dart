@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
@@ -38,7 +37,7 @@ Future getData(String data) async {
           .timeout(const Duration(seconds: 40),
               onTimeout: () => Response('Timeout', 408));
   if (response.statusCode == 200) {
-    // log(response.body.toString(), name: 'HTTP service:');
+    //log(response.body.toString(), name: 'HTTP service:');
     return ((response.body));
   } else {
     log('http ERROR: ${response.body}', name: 'HTTP service error');

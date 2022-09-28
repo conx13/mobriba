@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/models/otsiElementi/otsi_koodi_list_model.dart';
-import 'package:mobriba/widgets/otsiElementi/otsi_koodi_form.dart';
-import 'package:mobriba/widgets/otsiElementi/otsi_list_card.dart';
+import '../../models/otsiElementi/otsi_koodi_list_model.dart';
+import '../../widgets/otsiElementi/otsi_koodi_form.dart';
+import '../../widgets/otsiElementi/otsi_list_card.dart';
 
 import '../../services/api.dart' as api;
 

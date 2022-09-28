@@ -15,7 +15,7 @@ class OtsiToodGrupp {
   String lepnr;
   String too;
   int jid;
-  double kogus;
+  num kogus;
   String gnimi;
   bool ontoos;
   bool onresult;

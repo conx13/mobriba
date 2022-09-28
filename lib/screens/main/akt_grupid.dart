@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobriba/models/main/tana_grupid.dart';
-import 'package:mobriba/services/api.dart';
-import 'package:mobriba/widgets/main/akt_grupp_card.dart';
-import 'package:mobriba/widgets/main/akt_grupp_too_card.dart';
+import '../../models/main/tana_grupid.dart';
+import '../../services/api.dart';
+import '../../widgets/main/akt_grupp_card.dart';
+import '../../widgets/main/akt_grupp_too_card.dart';
 
 // Map-i lisa gruppeerimiseks
 extension Iterables<E> on Iterable<E> {
@@ -86,7 +86,10 @@ class _AktGrupidScreenState extends State<AktGrupidScreen> {
                     itemCount: _aktTootajadGrupid.length,
                     itemBuilder: (_, int index) {
                       return AktGruppCard(
-                        _aktTootajadGrupid[index].nimi,
+                        _aktTootajadGrupid[index].tid,
+                        _aktTootajadGrupid[index].enimi,
+                        _aktTootajadGrupid[index].pnimi,
+                        _aktTootajadGrupid[index].pilt,
                         _aktTootajadGrupid[index].lepnr,
                         _aktTootajadGrupid[index].too,
                         DateFormat('kk:mm')

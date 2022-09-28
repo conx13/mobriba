@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:mobriba/screens/tootajad/tootaja_page.dart';
+import 'package:mobriba/widgets/otsiElementi/avatar_pilt.dart';
 
 class AktGruppCard extends StatelessWidget {
   @required
-  final String nimi;
+  final int tid;
+  final String enimi;
+  final String pnimi;
+  final String pilt;
   final String leping;
   final String job;
   final String start;
 
-  const AktGruppCard(this.nimi, this.leping, this.job, this.start, {Key? key})
-      : super(key: key);
+  const AktGruppCard(
+    this.tid,
+    this.enimi,
+    this.pnimi,
+    this.pilt,
+    this.leping,
+    this.job,
+    this.start, {
+    Key? key,
+  }) : super(
+          key: key,
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +31,14 @@ class AktGruppCard extends StatelessWidget {
       elevation: 1,
       margin: const EdgeInsets.all(2),
       child: ListTile(
-        //contentPadding: const EdgeInsetsDirectional.fromSTEB(10, 4, 10, 0),
-        // TODO pane iia pilt kui on
-        leading: const CircleAvatar(
-          child: Text('AA'),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AvatarPilt(pilt, enimi[0] + pnimi[0]),
+          ],
         ),
         title: Text(
-          nimi,
+          '$enimi $pnimi',
           style: Theme.of(context).textTheme.headline6,
         ),
         subtitle: Column(
@@ -51,6 +67,14 @@ class AktGruppCard extends StatelessWidget {
             ),
           ],
         ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UserPage(tid),
+            ),
+          );
+        },
       ),
     );
   }

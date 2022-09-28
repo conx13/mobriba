@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:mobriba/models/otsiElementi/elem_stats.dart';
-import 'package:mobriba/models/otsiElementi/elemendi_info.dart';
-import 'package:mobriba/models/otsiElementi/kestegi_model.dart';
-import 'package:mobriba/widgets/otsiElementi/avatar_pilt.dart';
-import 'package:mobriba/widgets/otsiElementi/elem_pais.dart';
-import 'package:mobriba/widgets/otsiElementi/elemendi_stats.dart';
+import '../../models/otsiElementi/elem_stats.dart';
+import '../../models/otsiElementi/elemendi_info.dart';
+import '../../models/otsiElementi/kestegi_model.dart';
+import '../../widgets/otsiElementi/avatar_pilt.dart';
+import '../../widgets/otsiElementi/elem_pais.dart';
+import '../../widgets/otsiElementi/elemendi_stats.dart';
 
 import '../../services/api.dart' as api;
 
@@ -37,9 +37,8 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
   String _aeg = '00:00';
   String _tulemus = '0,0 m2/h';
   final String _keskmineAeg = '0.0';
-  bool isLoadedKesTegi = false;
-  bool kesTegiErr = false;
-  bool statsTyhi = false;
+  bool _isLoadedKesTegi = false;
+  bool _statsTyhi = false;
 
   List<KesTegi> _kesTegiList = [];
   Map<Object, List<KesTegi>> _kesTegiGrupp = {};
@@ -78,18 +77,17 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
   getKesTegi(int jid) async {
     try {
       setState(() {
-        isLoadedKesTegi = true;
+        _isLoadedKesTegi = true;
       });
       _kesTegiList = await api.kesTegi(jid);
       _kesTegiGrupp = _kesTegiList.groupBy(((p) => p.nimi));
       //log(kesTegiToJson(_kesTegiList), name: 'Kes tegi');
       setState(() {
-        isLoadedKesTegi = false;
+        _isLoadedKesTegi = false;
       });
     } catch (e) {
       setState(() {
-        kesTegiErr = true;
-        isLoadedKesTegi = false;
+        _isLoadedKesTegi = false;
       });
       log(e.toString(), name: 'Error Kest tegi');
     }
@@ -117,7 +115,7 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
       _elemStats = await api.elemendiStats(jid);
       if (_elemStats.isEmpty) {
         setState(() {
-          statsTyhi = true;
+          _statsTyhi = true;
         });
       } else {
         setState(() {
@@ -156,7 +154,7 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
               leping: _leping,
             ),
             Visibility(
-              visible: statsTyhi,
+              visible: _statsTyhi,
               child: Text(
                 'Ei ole töösse võetud!',
                 style: Theme.of(context)
@@ -166,11 +164,11 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
               ),
             ),
             Visibility(
-                visible: !statsTyhi,
+                visible: !_statsTyhi,
                 child: Stats(
                     aeg: _aeg, tulemus: _tulemus, keskmineAeg: _keskmineAeg)),
             Expanded(
-                child: !isLoadedKesTegi
+                child: !_isLoadedKesTegi
                     ? kesTegiList(_kesTegiGrupp)
                     : const Center(
                         child: CircularProgressIndicator(),
@@ -191,7 +189,8 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
           child: ExpansionTile(
             childrenPadding: const EdgeInsets.only(bottom: 10),
             //tilePadding: EdgeInsets.all(10),
-            leading: AvatarPilt(listGrupp[nimi]),
+            leading: AvatarPilt(listGrupp[nimi]![0].pilt,
+                listGrupp[nimi]![0].enimi[0] + listGrupp[nimi]![0].pnimi[0]),
             title: Text(nimi),
             children: listGrupp[nimi]!
                 .map((e) => Row(

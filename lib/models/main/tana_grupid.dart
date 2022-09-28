@@ -15,6 +15,7 @@ class Grupp {
       {required this.nimi,
       required this.enimi,
       required this.pnimi,
+      required this.pilt,
       required this.lepnr,
       required this.too,
       required this.gnimi,
@@ -27,6 +28,7 @@ class Grupp {
   String nimi;
   String enimi;
   String pnimi;
+  String pilt;
   String lepnr;
   String too;
   String gnimi;
@@ -40,6 +42,7 @@ class Grupp {
         nimi: json["Nimi"],
         enimi: json["ENIMI"],
         pnimi: json["PNIMI"],
+        pilt: json["pilt"] ?? '',
         lepnr: json["LEPNR"],
         too: json["TOO"],
         gnimi: json["GNIMI"],
@@ -52,6 +55,7 @@ class Grupp {
 
   Map<String, dynamic> toJson() => {
         "NIMI": nimi,
+        "pilt": pilt,
         "LEPNR": lepnr,
         "TOO": too,
         "GNIMI": gnimi,

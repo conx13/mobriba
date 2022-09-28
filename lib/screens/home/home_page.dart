@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/enums/bottom_nav_item.dart';
-import 'package:mobriba/widgets/home/tab_navigator.dart';
+import '../../enums/bottom_nav_item.dart';
+import '../../widgets/home/tab_navigator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

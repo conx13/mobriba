@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'dart:convert';
 
-import 'package:mobriba/models/otsiElementi/elem_stats.dart';
-import 'package:mobriba/models/otsiElementi/elemendi_info.dart';
-import 'package:mobriba/models/otsiElementi/kestegi_model.dart';
-import 'package:mobriba/models/otsiElementi/otsi_koodi_list_model.dart';
+import '../../models/otsiElementi/elem_stats.dart';
+import '../../models/otsiElementi/elemendi_info.dart';
+import '../../models/otsiElementi/kestegi_model.dart';
+import '../../models/otsiElementi/otsi_koodi_list_model.dart';
 
 import '../services/http_service.dart';
 
@@ -59,7 +59,7 @@ Future getUser(int tid) async {
 /*                               Töötajad grupis                              */
 /* -------------------------------------------------------------------------- */
 Future getAktGrupp(String ggrupp) async {
-  log(ggrupp, name: 'GGRUPP');
+  //log(ggrupp, name: 'GGRUPP');
   var result = await getData('/rkood/tanagrupp/$ggrupp')
       .then((value) => gruppFromJson(value));
   return result;
@@ -82,7 +82,7 @@ Future getTootajaGrupp() async {
 Future delPilt(String pilt) async {
   log('delete pilt $pilt', name: 'Delete pilt');
   var result = await delData('/users/delpic/$pilt');
-  log(result.toString(), name: 'Pilt result');
+  //log(result.toString(), name: 'Pilt result');
   return result;
 }
 
@@ -105,7 +105,7 @@ Future<List<KesTegi>> kesTegi(int jid) async {
   var result = await getData('/rkood/kestegi/$jid')
       .then((value) => kesTegiFromJson(value));
   if (result.isEmpty) {
-    log('Kes tegi tühi');
+    //log('Kes tegi tühi');
     throw Exception("Ei ole andmeid!");
   } else {
     return result;
@@ -118,7 +118,7 @@ Future<List<KesTegi>> kesTegi(int jid) async {
 Future<List<ElemInfo>> elemendiInfo(int jid) async {
   var result = await getData('/rkood/eleminfo/$jid')
       .then((value) => elemInfoFromJson(value));
-  log(elemInfoToJson(result), name: 'Elemendi info');
+  //log(elemInfoToJson(result), name: 'Elemendi info');
   return result;
 }
 
