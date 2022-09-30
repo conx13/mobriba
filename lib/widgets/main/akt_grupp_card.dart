@@ -34,7 +34,11 @@ class AktGruppCard extends StatelessWidget {
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AvatarPilt(pilt, enimi[0] + pnimi[0]),
+            AvatarPilt(
+              pilt: pilt,
+              tahed: enimi[0] + pnimi[0],
+              varv: Theme.of(context).primaryColor,
+            ),
           ],
         ),
         title: Text(

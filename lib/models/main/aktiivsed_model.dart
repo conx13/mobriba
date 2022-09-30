@@ -71,19 +71,28 @@ class MitteAktiivsedGrupid {
 
 class MitteAktiivneGrupp {
   final String nimi;
+  final String enimi;
+  final String pnimi;
+  final String pilt;
   final int tid;
   final int tgruppId;
   final String tgruppNimi;
 
   MitteAktiivneGrupp(
       {required this.nimi,
+      required this.enimi,
+      required this.pnimi,
+      required this.pilt,
       required this.tid,
       required this.tgruppId,
       required this.tgruppNimi});
 
   factory MitteAktiivneGrupp.fromJson(Map<String, dynamic> json) {
     return MitteAktiivneGrupp(
-      nimi: json['Nimi'].toString(),
+      nimi: json['nimi'],
+      enimi: json['ENIMI'],
+      pnimi: json['PNIMI'],
+      pilt: json['pilt'] ?? '',
       tid: json['TID'],
       tgruppId: json['toogrupp_id'],
       tgruppNimi: json['toogrupp_nimi'],

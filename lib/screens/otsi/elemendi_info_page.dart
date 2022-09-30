@@ -189,8 +189,12 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
           child: ExpansionTile(
             childrenPadding: const EdgeInsets.only(bottom: 10),
             //tilePadding: EdgeInsets.all(10),
-            leading: AvatarPilt(listGrupp[nimi]![0].pilt,
-                listGrupp[nimi]![0].enimi[0] + listGrupp[nimi]![0].pnimi[0]),
+            leading: AvatarPilt(
+              pilt: listGrupp[nimi]![0].pilt,
+              tahed:
+                  listGrupp[nimi]![0].enimi[0] + listGrupp[nimi]![0].pnimi[0],
+              varv: Theme.of(context).primaryColor,
+            ),
             title: Text(nimi),
             children: listGrupp[nimi]!
                 .map((e) => Row(

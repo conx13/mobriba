@@ -32,8 +32,10 @@ Future getTanaTool() async {
 /*                              Aktiivsed grupid                              */
 /* -------------------------------------------------------------------------- */
 Future getTanaToolList() async {
+  //log('GETTÄNATÖÖL');
   var result = await getData('/rkood/tanatoollist')
       .then((value) => AktiivsedGrupid.fromJson(json.decode(value)));
+  //log(result.toString(), name: 'getTanaTööl');
   return result;
 }
 

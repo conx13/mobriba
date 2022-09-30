@@ -5,7 +5,10 @@ import '../../services/http_service.dart';
 class AvatarPilt extends StatelessWidget {
   final String pilt;
   final String tahed;
-  const AvatarPilt(this.pilt, this.tahed, {Key? key}) : super(key: key);
+  final Color varv;
+  const AvatarPilt(
+      {required this.pilt, required this.tahed, required this.varv, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +16,8 @@ class AvatarPilt extends StatelessWidget {
     //tring pilt = kesTegi![0].pilt;
     //log(pilt, name: 'PILT');
     return CircleAvatar(
+      foregroundColor: Colors.white,
+      backgroundColor: varv,
       backgroundImage: pilt != ''
           ? NetworkImage('$url/pics/$pilt', headers: httpPais)
           : null,

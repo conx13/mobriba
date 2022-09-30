@@ -113,8 +113,6 @@ class _UserPiltState extends State<UserPilt> {
             Positioned(
               bottom: 0,
               right: 0,
-              //TODO IconButton
-
               child: ElevatedButton(
                 //onPressed: () => {valiPilt()},
                 onPressed: (() {

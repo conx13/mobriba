@@ -8,6 +8,7 @@ import 'dart:convert';
 /* -------------------------------------------------------------------------- */
 
 String url = 'http://10.0.30.154:3000/api'; //Matek Raspeberry;
+//String url = 'http://10.0.30.192:3000/api'; //Matek Wifi
 //String url = 'http://10.0.30.155:3000/api'; //Matek Raspeberry;
 //String url = 'http://192.168.1.202:3000/api/rkood/$data'; //Kodus
 //String url = 'http://192.168.8.100:3000/api/rkood/$data';
@@ -19,9 +20,9 @@ String password = '123£-UYh4-8UXx';
 String basicAuth = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
 
 Map<String, String> httpPais = {
-  "Access-Control-Allow-Origin": '*',
-  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE, HEAD',
-  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, HEAD',
+  "Access-Control-Allow-Credentials": 'true',
   'content-type': 'application/json',
   'accept': 'application/json',
   'authorization': basicAuth
@@ -36,8 +37,8 @@ Future getData(String data) async {
       await get(Uri.parse(Uri.encodeFull('$url$data')), headers: httpPais)
           .timeout(const Duration(seconds: 40),
               onTimeout: () => Response('Timeout', 408));
+  //log(response.body.toString(), name: 'HTTP service:');
   if (response.statusCode == 200) {
-    //log(response.body.toString(), name: 'HTTP service:');
     return ((response.body));
   } else {
     log('http ERROR: ${response.body}', name: 'HTTP service error');

@@ -2,15 +2,18 @@
 
 A new Flutter project.
 
-## Getting Started
+## Install to Android
+veendu et on:
+AndroidManifest.xml
 
-This project is a starting point for a Flutter application.
+<manifest xlmns:android...>
+ ...
+ <uses-permission android:name="android.permission.INTERNET" />
+ <application ...
+</manifest>
 
-A few resources to get you started if this is your first Flutter project:
+1) install
+/Users/hillaraas/AndroidStudioProjects/test_flutter/build/app/outputs/apk/release kaustast
+app-arm64-v8a-release.apk
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+"fflutter install"

@@ -3,8 +3,6 @@ import '../../models/main/aktiivsed_model.dart';
 import '../../services/api.dart';
 import '../../widgets/main/mitte_akt_card.dart';
 
-//TODO vaja edasi teha
-
 class PuuduvadEkraan extends StatefulWidget {
   const PuuduvadEkraan({Key? key}) : super(key: key);
 
@@ -45,6 +43,9 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
                 itemBuilder: (BuildContext context, int index) {
                   return MitteAktCard(
                     puuduList[index].nimi,
+                    puuduList[index].enimi,
+                    puuduList[index].pnimi,
+                    puuduList[index].pilt,
                     puuduList[index].tgruppNimi,
                     puuduList[index].tid,
                   );
