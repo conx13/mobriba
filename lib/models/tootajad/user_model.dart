@@ -11,19 +11,20 @@ String userToJson(List<User> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class User {
-  User({
-    required this.enimi,
-    required this.pnimi,
-    required this.tid,
-    required this.ikood,
-    required this.ajagupp,
-    required this.aktiivne,
-    required this.toogruppId,
-    this.telefon = '',
-    required this.toogruppNimi,
-    required this.ajanimi,
-    this.pilt = '',
-  });
+  User(
+      {required this.enimi,
+      required this.pnimi,
+      required this.tid,
+      required this.ikood,
+      required this.ajagupp,
+      required this.aktiivne,
+      required this.toogruppId,
+      this.telefon = '',
+      required this.toogruppNimi,
+      required this.ajanimi,
+      this.pilt = '',
+      required this.email,
+      required this.firma});
 
   String enimi;
   String pnimi;
@@ -36,20 +37,23 @@ class User {
   String toogruppNimi;
   String ajanimi;
   String pilt;
+  String email;
+  String firma;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        enimi: json["ENIMI"],
-        pnimi: json["PNIMI"],
-        tid: json["TID"],
-        ikood: json["IKOOD"],
-        ajagupp: json["AJAGUPP"],
-        aktiivne: json["Aktiivne"],
-        toogruppId: json["toogrupp_id"],
-        telefon: json["telefon"] ?? '',
-        toogruppNimi: json["toogrupp_nimi"],
-        ajanimi: json["Ajanimi"],
-        pilt: json["pilt"] ?? '',
-      );
+      enimi: json["ENIMI"],
+      pnimi: json["PNIMI"],
+      tid: json["TID"],
+      ikood: json["IKOOD"],
+      ajagupp: json["AJAGUPP"],
+      aktiivne: json["Aktiivne"],
+      toogruppId: json["toogrupp_id"],
+      telefon: json["telefon"] ?? '',
+      toogruppNimi: json["toogrupp_nimi"],
+      ajanimi: json["Ajanimi"],
+      pilt: json["pilt"] ?? '',
+      email: json['email'] ?? '',
+      firma: json['firma'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "ENIMI": enimi,
@@ -63,5 +67,7 @@ class User {
         "toogrupp_nimi": toogruppNimi,
         "Ajanimi": ajanimi,
         "pilt": pilt,
+        'email': email,
+        'firma': firma
       };
 }

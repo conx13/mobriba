@@ -50,7 +50,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       children: [
                         AppBar(
                           title: Text(
-                            '${snapshot.data![0].pnimi} ${snapshot.data![0].enimi}',
+                            '*${snapshot.data![0].ikood}*',
+                            style: const TextStyle(
+                                fontFamily: 'Ribakood', fontSize: 25),
                           ),
                         ),
                         const SizedBox(
@@ -62,36 +64,44 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                 snapshot.data![0].enimi[0],
                             snapshot.data![0].tid),
                         const SizedBox(
-                          height: 20,
+                          height: 30,
                         ),
                         Text(
                           '${snapshot.data![0].pnimi} ${snapshot.data![0].enimi}',
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineLarge,
                         ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              16, 16, 16, 0),
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                  width: 130, child: Text('Telefon/email:')),
-                              // TODO venita rida lõpuni
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(color: Colors.white),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10))),
-                                padding: const EdgeInsets.all(10),
-                                //color: Colors.white,
-                                child: Text(
-                                  snapshot.data![0].telefon,
-                                  style: Theme.of(context).textTheme.headline6,
-                                ),
-                              )
-                            ],
-                          ),
-                        )
+                        const Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                            child: Divider()),
+                        InfoRida(
+                          infoLabel: 'Telefon:',
+                          infoText: snapshot.data![0].telefon,
+                        ),
+                        InfoRida(
+                          infoLabel: 'Email:',
+                          infoText: snapshot.data![0].telefon,
+                        ),
+                        const Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+                            child: Divider()),
+                        InfoRida(
+                          infoLabel: 'Töö grupp:',
+                          infoText: snapshot.data![0].toogruppNimi,
+                        ),
+                        InfoRida(
+                          infoLabel: 'Aja grupp:',
+                          infoText: snapshot.data![0].ajanimi,
+                        ),
+                        const Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+                            child: Divider()),
+                        InfoRida(
+                          infoLabel: 'Asutus:',
+                          infoText: 'Matek AS',
+                        ),
                       ],
                     );
                   } else {
@@ -100,6 +110,52 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 }),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class InfoRida extends StatelessWidget {
+  final String infoLabel;
+  final String infoText;
+
+  const InfoRida({
+    required this.infoLabel,
+    required this.infoText,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+      child: Row(
+        children: [
+          SizedBox(
+              width: 130,
+              child: Align(
+                  alignment: Alignment.centerRight, child: Text(infoLabel))),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.white),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              padding: const EdgeInsets.all(10),
+              //color: Colors.white,
+              child: Text(
+                infoText,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(fontSize: 20),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
