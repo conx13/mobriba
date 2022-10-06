@@ -89,6 +89,16 @@ Future delPilt(String pilt) async {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                                Otsi töötajat                               */
+/* -------------------------------------------------------------------------- */
+Future<List<User>> otsiTootajat(String otsiText, String akt) async {
+  var result = await getData('/users/otsi/$otsiText/$akt')
+      .then((value) => userFromJson(value));
+  //log(otsiToodGruppToJson(result), name: 'OTSI TOOD');
+  return result;
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                 Otsi koodi                                 */
 /* -------------------------------------------------------------------------- */
 Future<List<OtsiToodGrupp>> otsiTood(
