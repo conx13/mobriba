@@ -40,75 +40,80 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Widget build(BuildContext context) {
     return Material(
       child: SafeArea(
-        child: Column(
-          children: [
-            FutureBuilder<List<User>>(
-                future: _user,
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: [
-                        AppBar(
-                          title: Text(
-                            '*${snapshot.data![0].ikood}*',
-                            style: const TextStyle(
-                                fontFamily: 'Ribakood', fontSize: 25),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              FutureBuilder<List<User>>(
+                  future: _user,
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          AppBar(
+                            title: Text(
+                              '*${snapshot.data![0].ikood}*',
+                              style: const TextStyle(
+                                  fontFamily: 'Ribakood', fontSize: 20),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        UserPilt(
-                            snapshot.data![0].pilt,
-                            snapshot.data![0].pnimi[0] +
-                                snapshot.data![0].enimi[0],
-                            snapshot.data![0].tid),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                          '${snapshot.data![0].pnimi} ${snapshot.data![0].enimi}',
-                          style: Theme.of(context).textTheme.headlineLarge,
-                        ),
-                        const Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-                            child: Divider()),
-                        InfoRida(
-                          infoLabel: 'Telefon:',
-                          infoText: snapshot.data![0].telefon,
-                        ),
-                        InfoRida(
-                          infoLabel: 'Email:',
-                          infoText: snapshot.data![0].telefon,
-                        ),
-                        const Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
-                            child: Divider()),
-                        InfoRida(
-                          infoLabel: 'Töö grupp:',
-                          infoText: snapshot.data![0].toogruppNimi,
-                        ),
-                        InfoRida(
-                          infoLabel: 'Aja grupp:',
-                          infoText: snapshot.data![0].ajanimi,
-                        ),
-                        const Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
-                            child: Divider()),
-                        InfoRida(
-                          infoLabel: 'Asutus:',
-                          infoText: 'Matek AS',
-                        ),
-                      ],
-                    );
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                }),
-          ],
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          UserPilt(
+                              snapshot.data![0].pilt,
+                              snapshot.data![0].pnimi[0] +
+                                  snapshot.data![0].enimi[0],
+                              snapshot.data![0].tid),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '${snapshot.data![0].pnimi} ${snapshot.data![0].enimi}',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                          const Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                              child: Divider()),
+                          InfoRida(
+                            infoLabel: 'Telefon:',
+                            infoText: snapshot.data![0].telefon,
+                          ),
+                          InfoRida(
+                            infoLabel: 'Email:',
+                            infoText: snapshot.data![0].email,
+                          ),
+                          const Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                              child: Divider()),
+                          InfoRida(
+                            infoLabel: 'Töö grupp:',
+                            infoText: snapshot.data![0].toogruppNimi,
+                          ),
+                          InfoRida(
+                            infoLabel: 'Aja grupp:',
+                            infoText: snapshot.data![0].ajanimi,
+                          ),
+                          const Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                              child: Divider()),
+                          InfoRida(
+                            infoLabel: 'Asutus:',
+                            infoText: snapshot.data![0].firma,
+                          ),
+                        ],
+                      );
+                    } else {
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: const Center(child: CircularProgressIndicator()),
+                      );
+                    }
+                  }),
+            ],
+          ),
         ),
       ),
     );
@@ -128,11 +133,11 @@ class InfoRida extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+      padding: const EdgeInsetsDirectional.fromSTEB(16, 2, 16, 0),
       child: Row(
         children: [
           SizedBox(
-              width: 130,
+              width: 80,
               child: Align(
                   alignment: Alignment.centerRight, child: Text(infoLabel))),
           const SizedBox(
@@ -144,14 +149,14 @@ class InfoRida extends StatelessWidget {
                   color: Colors.white,
                   border: Border.all(color: Colors.white),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(8),
               //color: Colors.white,
               child: Text(
                 infoText,
                 style: Theme.of(context)
                     .textTheme
                     .headline6!
-                    .copyWith(fontSize: 20),
+                    .copyWith(fontSize: 16),
               ),
             ),
           )

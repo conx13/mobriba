@@ -6,19 +6,27 @@ class Tootajad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => Scaffold(
-                      appBar: AppBar(
-                        title: const Text('Next Page to Create Post'),
-                      ),
-                    )));
-          },
-          child: const Text("Move to Next page"),
+        body: CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          floating: true,
+          pinned: true,
+          snap: false,
+          centerTitle: true,
+          title: Text('Töötajad'),
+          bottom: AppBar(
+            title: Container(
+              child: const Center(
+                child: TextField(
+                  decoration: InputDecoration(
+                      hintText: 'Otsi töötajat:',
+                      suffixIcon: Icon(Icons.search)),
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
-    );
+      ],
+    ));
   }
 }

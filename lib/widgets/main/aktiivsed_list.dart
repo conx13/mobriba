@@ -9,7 +9,8 @@ class AktiivsedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (aktlist.isNotEmpty) {
-      return ListView.builder(
+      return Scrollbar(
+        child: ListView.builder(
           itemCount: aktlist.length,
           itemBuilder: (BuildContext context, int index) {
             return Card(
@@ -48,7 +49,9 @@ class AktiivsedList extends StatelessWidget {
                 ),
               ),
             );
-          });
+          },
+        ),
+      );
     } else {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

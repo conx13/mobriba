@@ -74,18 +74,20 @@ class _OtsiKoodiPageState extends State<OtsiKoodiPage> {
           ? const Center(child: CircularProgressIndicator())
           : Column(children: [
               Expanded(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _otsiTulem.length,
-                    itemBuilder: ((context, index) {
-                      return OtsiListCard(
-                          _otsiTulem[index].tulem,
-                          _otsiTulem[index].jid,
-                          _otsiTulem[index].too,
-                          _otsiTulem[index].lepnr,
-                          _otsiTulem[index].kogus,
-                          context);
-                    })),
+                child: Scrollbar(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _otsiTulem.length,
+                      itemBuilder: ((context, index) {
+                        return OtsiListCard(
+                            _otsiTulem[index].tulem,
+                            _otsiTulem[index].jid,
+                            _otsiTulem[index].too,
+                            _otsiTulem[index].lepnr,
+                            _otsiTulem[index].kogus,
+                            context);
+                      })),
+                ),
               )
             ]),
     );

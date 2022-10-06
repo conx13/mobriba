@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import '../../models/main/aktiivsed_model.dart';
 import '../../services/api.dart';
@@ -8,6 +10,19 @@ class PuuduvadEkraan extends StatefulWidget {
 
   @override
   State<PuuduvadEkraan> createState() => _PuuduvadEkraanState();
+}
+
+extension IterableExtension<T> on Iterable<T> {
+  Iterable<T> distinctBy(Object Function(T e) getCompareValue) {
+    var result = <T>[];
+    forEach((element) {
+      if (!result.any((x) => getCompareValue(x) == getCompareValue(element))) {
+        result.add(element);
+      }
+    });
+
+    return result;
+  }
 }
 
 class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
@@ -34,11 +49,14 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
             final puuduList =
                 snapshot.data.mitteAktGrupid as List<MitteAktiivneGrupp>;
             //TODO Kui thta gruppe filtreerida
-/*             var seen = <String>{};
-            List<MitteAktiivneGrupp> test =
+            var tooGrupid = puuduList.distinctBy((e) => e.tgruppNimi);
+/*             var seen = <List<String>>{};
+            List<MitteAktiivneGrupp> tooGrupid =
                 puuduList.where((t) => seen.add(t.tgruppNimi)).toList(); */
-            //print(test[0].tgruppNimi);
-            return ListView.builder(
+            log(tooGrupid.toString(), name: 'Töögrupid');
+            return Scrollbar(
+              thumbVisibility: true,
+              child: ListView.builder(
                 itemCount: puuduList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return MitteAktCard(
@@ -49,7 +67,9 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
                     puuduList[index].tgruppNimi,
                     puuduList[index].tid,
                   );
-                });
+                },
+              ),
+            );
           } else if (snapshot.hasError) {
             return const Center(
               child: Text('ERROR"'),
