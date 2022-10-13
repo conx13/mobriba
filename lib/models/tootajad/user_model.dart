@@ -39,6 +39,8 @@ class User {
   String pilt;
   String email;
   String firma;
+  String get ntahed => '${enimi[0]}${pnimi[0]}';
+  String get nimi => '$pnimi $enimi';
 
   factory User.fromJson(Map<String, dynamic> json) => User(
       enimi: json["ENIMI"],
@@ -68,6 +70,8 @@ class User {
         "Ajanimi": ajanimi,
         "pilt": pilt,
         'email': email,
-        'firma': firma
+        'firma': firma,
+        'ntahed': ntahed,
+        'nimi': nimi
       };
 }

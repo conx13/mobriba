@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mobriba/screens/tootajad/user_info_page.dart';
 import '../../models/main/aktiivsed_model.dart';
 import '../../services/api.dart';
 import '../../widgets/main/mitte_akt_card.dart';
@@ -34,6 +35,16 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
     _tanaPoleList = getMitteAktList();
   }
 
+// Näitab töötaja infot:
+  void naitaUserInfot(int tid) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserInfoPage(tid),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,13 +71,13 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
                 itemCount: puuduList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return MitteAktCard(
-                    puuduList[index].nimi,
-                    puuduList[index].enimi,
-                    puuduList[index].pnimi,
-                    puuduList[index].pilt,
-                    puuduList[index].tgruppNimi,
-                    puuduList[index].tid,
-                  );
+                      puuduList[index].nimi,
+                      puuduList[index].enimi,
+                      puuduList[index].pnimi,
+                      puuduList[index].pilt,
+                      puuduList[index].tgruppNimi,
+                      puuduList[index].tid,
+                      naitaUserInfot);
                 },
               ),
             );

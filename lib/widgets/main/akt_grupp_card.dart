@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobriba/screens/tootajad/tootaja_page.dart';
+
 import 'package:mobriba/screens/tootajad/user_info_page.dart';
 import 'package:mobriba/widgets/otsiElementi/avatar_pilt.dart';
 

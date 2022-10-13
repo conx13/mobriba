@@ -15,11 +15,12 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   Future? _tanaKokku;
   Future? _tanaToolList;
+  int asukoht = 1;
 
   @override
   void initState() {
     super.initState();
-    _tanaKokku = getTanaTool();
+    _tanaKokku = getTanaTool(asukoht);
     _tanaToolList = getTanaToolList();
   }
 
@@ -99,7 +100,7 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _onRefresh() async {
     setState(() {
-      _tanaKokku = getTanaTool();
+      _tanaKokku = getTanaTool(asukoht);
       _tanaToolList = getTanaToolList();
       //log('REFRESH', name: 'kodu3');
     });

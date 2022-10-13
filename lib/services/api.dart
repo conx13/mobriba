@@ -16,11 +16,12 @@ import '../models/main/aktiivsed_model.dart';
 /* -------------------------------------------------------------------------- */
 /*                     Hetkel aktiivsed ja mitteaktiivsed                     */
 /* -------------------------------------------------------------------------- */
-Future getTanaTool() async {
+Future getTanaTool(int asuk) async {
   var results = await Future.wait([
     getData('/rkood/tanapoletool'),
-    getData('/rkood/tanatool'),
+    getData('/rkood/tanatool/$asuk'),
   ]);
+
   List<Aktiivsed> aktiivsedList = [];
   aktiivsedList.add(Aktiivsed.fromJson(json.decode(results[0])));
   aktiivsedList.add(Aktiivsed.fromJson(json.decode(results[1])));
@@ -91,7 +92,7 @@ Future delPilt(String pilt) async {
 /* -------------------------------------------------------------------------- */
 /*                                Otsi töötajat                               */
 /* -------------------------------------------------------------------------- */
-Future<List<User>> otsiTootajat(String otsiText, String akt) async {
+Future<List<User>> otsiTootajat(String otsiText, int akt) async {
   var result = await getData('/users/otsi/$otsiText/$akt')
       .then((value) => userFromJson(value));
   //log(otsiToodGruppToJson(result), name: 'OTSI TOOD');

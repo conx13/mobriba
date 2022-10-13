@@ -14,6 +14,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
+        cardTheme: CardTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            side: BorderSide(color: Theme.of(context).colorScheme.outline),
+          ),
+          elevation: 0,
+          clipBehavior: Clip.antiAlias,
+          margin: const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 4),
+        ),
       ),
       title: 'rKood',
       debugShowCheckedModeBanner: false,

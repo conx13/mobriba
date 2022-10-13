@@ -11,9 +11,10 @@ class MitteAktCard extends StatelessWidget {
   final String pilt;
   final String grupp;
   final int tid;
+  final Function(int tid) naitaTootajatInfot;
 
-  const MitteAktCard(
-      this.nimi, this.enimi, this.pnimi, this.pilt, this.grupp, this.tid,
+  const MitteAktCard(this.nimi, this.enimi, this.pnimi, this.pilt, this.grupp,
+      this.tid, this.naitaTootajatInfot,
       {Key? key})
       : super(key: key);
 
@@ -21,14 +22,7 @@ class MitteAktCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UserInfoPage(tid),
-            ),
-          );
-        },
+        onTap: () => naitaTootajatInfot(tid),
         leading: AvatarPilt(
             pilt: pilt,
             tahed: enimi[0] + pnimi[0],
