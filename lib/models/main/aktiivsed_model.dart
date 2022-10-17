@@ -1,20 +1,32 @@
+import 'dart:convert';
+
 /* -------------------------------------------------------------------------- */
 /*                               Klass Aktiivsed                              */
 /* -------------------------------------------------------------------------- */
+// To parse this JSON data, do
+//
+//     final aktiivsed = aktiivsedFromJson(jsonString);
+
+List<Aktiivsed> aktiivsedFromJson(String str) =>
+    List<Aktiivsed>.from(json.decode(str).map((x) => Aktiivsed.fromJson(x)));
+
+String aktiivsedToJson(List<Aktiivsed> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 class Aktiivsed {
-  final int data;
-
-  const Aktiivsed({
-    required this.data,
+  Aktiivsed({
+    required this.tulem,
   });
-  //factory Aktiivsed.fromJson(String str) => Aktiivsed.fromMap(json.decode(str));
 
-  //factory Aktiivsed.fromMap(Map<String, dynamic> json) => Aktiivsed(
-  factory Aktiivsed.fromJson(Map<String, dynamic> json) {
-    return Aktiivsed(
-      data: json["data"],
-    );
-  }
+  int tulem;
+
+  factory Aktiivsed.fromJson(Map<String, dynamic> json) => Aktiivsed(
+        tulem: json["tulem"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": tulem,
+      };
 }
 
 /* -------------------------------------------------------------------------- */

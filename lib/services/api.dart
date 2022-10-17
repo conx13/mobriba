@@ -14,27 +14,42 @@ import '../models/tootajad/user_model.dart';
 import '../models/main/aktiivsed_model.dart';
 
 /* -------------------------------------------------------------------------- */
-/*                     Hetkel aktiivsed ja mitteaktiivsed                     */
+/*                     Hetkel aktiivsed                                       */
 /* -------------------------------------------------------------------------- */
-Future getTanaTool(int asuk) async {
-  var results = await Future.wait([
-    getData('/rkood/tanapoletool'),
-    getData('/rkood/tanatool/$asuk'),
-  ]);
+Future<List<Aktiivsed>> getTanaTool(int asuk) async {
+  var results = await
+      //getData('/rkood/tanapoletool/$asuk').then((val) => aktiivsedFromJson(val)),
+      getData('/rkood/tanatool/$asuk')
+          .then((value) => aktiivsedFromJson(value));
+  //log(results[0].toString(), name: 'gettanatool');
+  return results;
+/*   List<dynamic> aktiivsedList = [];
+  aktiivsedList.add(results[0]);
+  aktiivsedList.add(results[1]);
+  return aktiivsedList; */
+}
 
-  List<Aktiivsed> aktiivsedList = [];
-  aktiivsedList.add(Aktiivsed.fromJson(json.decode(results[0])));
-  aktiivsedList.add(Aktiivsed.fromJson(json.decode(results[1])));
-  //log(aktiivsedList.toString(), name: 'http vastus');
-  return aktiivsedList;
+/* -------------------------------------------------------------------------- */
+/*                            Hetkel mitteaktiivsed                           */
+/* -------------------------------------------------------------------------- */
+Future<List<Aktiivsed>> getTanaPoleTool(int asuk) async {
+  var results = await getData('/rkood/tanapoletool/$asuk')
+      .then((val) => aktiivsedFromJson(val));
+  //getData('/rkood/tanatool/$asuk').then((value) => aktiivsedFromJson(value)),
+  //log(results[0].toString(), name: 'gettanatool');
+  return results;
+/*   List<dynamic> aktiivsedList = [];
+  aktiivsedList.add(results[0]);
+  aktiivsedList.add(results[1]);
+  return aktiivsedList; */
 }
 
 /* -------------------------------------------------------------------------- */
 /*                              Aktiivsed grupid                              */
 /* -------------------------------------------------------------------------- */
-Future getTanaToolList() async {
+Future getTanaToolList(int asuk) async {
   //log('GETTÄNATÖÖL');
-  var result = await getData('/rkood/tanatoollist')
+  var result = await getData('/rkood/tanatoollist/$asuk')
       .then((value) => AktiivsedGrupid.fromJson(json.decode(value)));
   //log(result.toString(), name: 'getTanaTööl');
   return result;
@@ -43,8 +58,8 @@ Future getTanaToolList() async {
 /* -------------------------------------------------------------------------- */
 /*                          Mitte aktiivsed tootajad                          */
 /* -------------------------------------------------------------------------- */
-Future getMitteAktList() async {
-  var result = await getData('/rkood/tanapolelist')
+Future getMitteAktList(int asuk) async {
+  var result = await getData('/rkood/tanapolelist/$asuk')
       .then((value) => MitteAktiivsedGrupid.fromJson(json.decode(value)));
   return result;
 }

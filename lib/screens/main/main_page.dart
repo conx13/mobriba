@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../services/api.dart';
 import '../../widgets/main/aktiivsed_list.dart';
@@ -13,15 +14,39 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  Future? _tanaKokku;
+  String _tanaKokku = '0';
+  String _tanaPoleKokku = '0';
   Future? _tanaToolList;
-  int asukoht = 1;
+  int _asukoht = 1;
+  bool _otsib = false;
+
+  void getData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _otsib = true;
+    });
+    await getTanaTool(_asukoht).then((value) {
+      if (value.isNotEmpty) {
+        _tanaKokku = value.first.tulem.toString();
+      }
+    });
+    await getTanaPoleTool(_asukoht).then(((value) {
+      if (value.isNotEmpty) {
+        _tanaPoleKokku = value.first.tulem.toString();
+      }
+    }));
+    setState(() {
+      _otsib = false;
+    });
+    prefs.setInt('asukoht', _asukoht);
+    //log(prefs.getInt('asukoht').toString(), name: 'main asukoht');
+  }
 
   @override
   void initState() {
     super.initState();
-    _tanaKokku = getTanaTool(asukoht);
-    _tanaToolList = getTanaToolList();
+    getData();
+    _tanaToolList = getTanaToolList(_asukoht);
   }
 
   @override
@@ -33,33 +58,14 @@ class _MainPageState extends State<MainPage> {
           child: Column(
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                // TODO võta pealkiri firmade tabelist jne
                 Text(
-                  'Pärnu tootmises:',
+                  'Pärnu tootmine:',
                   style: Theme.of(context).textTheme.headline3,
                 ),
               ]),
               //PaisAeg(), //Paneme paika kellaja
-              FutureBuilder(
-                  //panem paika aktiivsed kokku
-                  future: _tanaKokku,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        log(snapshot.error.toString(), name: 'Kodu1');
-                        return const Center(child: Text('ERROR'));
-                      } else if (snapshot.hasData) {
-                        final aktiivsedList = snapshot.data as List;
-                        return KokkuTool(aktiivsedList[1].data.toString(),
-                            aktiivsedList[0].data.toString());
-                      } else {
-                        return const Text('Andmeid ei ole');
-                      }
-                    }
-                    return Text('State: ${snapshot.connectionState}');
-                  }),
+              KokkuTool(_tanaKokku, _tanaPoleKokku),
               //lisama Divideri
               const Divider(
                 color: Colors.grey,
@@ -100,8 +106,9 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _onRefresh() async {
     setState(() {
-      _tanaKokku = getTanaTool(asukoht);
-      _tanaToolList = getTanaToolList();
+      getData();
+      //_tanaKokku = getTanaTool(asukoht);
+      _tanaToolList = getTanaToolList(_asukoht);
       //log('REFRESH', name: 'kodu3');
     });
   }
