@@ -43,7 +43,7 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
     setState(() {
       _asukoht = prefs.getInt('asukoht') ?? 1;
     });
-    log(prefs.getInt('asukoht').toString(), name: 'mitte tööl asukoht');
+    //log(prefs.getInt('asukoht').toString(), name: 'mitte tööl asukoht');
     return getMitteAktList(_asukoht);
   }
 
@@ -76,7 +76,7 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
 /*             var seen = <List<String>>{};
             List<MitteAktiivneGrupp> tooGrupid =
                 puuduList.where((t) => seen.add(t.tgruppNimi)).toList(); */
-            log(tooGrupid.toString(), name: 'Töögrupid');
+            //log(tooGrupid.toString(), name: 'Töögrupid');
             return Scrollbar(
               thumbVisibility: true,
               child: ListView.builder(

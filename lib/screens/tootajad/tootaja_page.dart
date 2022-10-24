@@ -31,7 +31,7 @@ class _UserPageState extends State<UserPage> {
   final TextEditingController userGruppController = TextEditingController();
   final TextEditingController userAegController = TextEditingController();
   String _nimeTahed = '';
-  late List<User> _user;
+  late User _user;
   List<Tootajagrupp>? _userGrupp;
   late int _selectedValue = 1;
   String _disabledUserGrupp = '';
@@ -68,18 +68,18 @@ class _UserPageState extends State<UserPage> {
 // Sätime paika esialgsed andmed
   userInitial() {
     setState(() {
-      userEnimeController.text = _user[0].enimi;
-      userPnimeController.text = _user[0].pnimi;
-      _nimeTahed = '${_user[0].enimi[0]}${_user[0].pnimi[0]}';
-      userIkoodController.text = _user[0].ikood;
-      userTelefonController.text = _user[0].telefon;
-      userGruppController.text = _user[0].toogruppNimi;
-      userAegController.text = _user[0].ajanimi;
-      _userAktiivne = _user[0].aktiivne == 0 ? false : true;
-      _selectedValue = _user[0].toogruppId;
-      _disabledUserGrupp = _user[0].toogruppNimi;
+      userEnimeController.text = _user.enimi;
+      userPnimeController.text = _user.pnimi;
+      _nimeTahed = '${_user.enimi}${_user.pnimi}';
+      userIkoodController.text = _user.ikood;
+      userTelefonController.text = _user.telefon;
+      userGruppController.text = _user.toogruppNimi;
+      userAegController.text = _user.ajanimi;
+      _userAktiivne = _user.aktiivne == 0 ? false : true;
+      _selectedValue = _user.toogruppId;
+      _disabledUserGrupp = _user.toogruppNimi;
       _userGrupp?.clear();
-      _userPilt = _user[0].pilt;
+      _userPilt = _user.pilt;
     });
   }
 

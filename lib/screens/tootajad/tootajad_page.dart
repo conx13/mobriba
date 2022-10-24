@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mobriba/models/tootajad/user_model.dart';
+import 'package:mobriba/screens/tootajad/tootaja_edit_page.dart';
 import 'package:mobriba/screens/tootajad/user_info_page.dart';
 import 'package:mobriba/services/api.dart' as api;
 import 'package:mobriba/widgets/tootajad/tootjad_list_card.dart';
@@ -56,6 +57,18 @@ class _TootajadState extends State<Tootajad> {
       context,
       MaterialPageRoute(
         builder: (context) => UserInfoPage(tid),
+      ),
+    );
+  }
+
+  // Muuda töötajat
+  void editTootaja(int tid) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TootajaEditPage(
+          tid: tid,
+        ),
       ),
     );
   }
@@ -136,7 +149,7 @@ class _TootajadState extends State<Tootajad> {
           return TootajadListCard(
               leitudKasutajad: _leitudKasutajad,
               indeks: ind,
-              vunk: teated,
+              editTootaja: ((tid) => editTootaja(tid)),
               naitaTootajaInfot: (int tid) => naitaUserInfot(tid));
         }, childCount: _leitudKasutajad?.length ?? 0),
       ),

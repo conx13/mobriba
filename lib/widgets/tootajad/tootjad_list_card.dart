@@ -4,24 +4,24 @@ import '../../models/tootajad/user_model.dart';
 import '../otsiElementi/avatar_pilt.dart';
 
 class TootajadListCard extends StatelessWidget {
-  final Function(String txt, bool err) vunk;
+  final Function(int tid) editTootaja;
   final Function(int tid) naitaTootajaInfot;
 
   const TootajadListCard(
       {Key? key,
       required List<User>? leitudKasutajad,
       required int indeks,
-      required this.vunk,
+      required this.editTootaja,
       required this.naitaTootajaInfot})
       : _leitudKasutajad = leitudKasutajad,
         _indeks = indeks,
-        _vunk = vunk,
+        _editTootaja = editTootaja,
         _naitaTootajaInfot = naitaTootajaInfot,
         super(key: key);
 
   final List<User>? _leitudKasutajad;
   final int _indeks;
-  final Function _vunk;
+  final Function _editTootaja;
   final Function _naitaTootajaInfot;
 
   @override
@@ -29,8 +29,7 @@ class TootajadListCard extends StatelessWidget {
     return Card(
         child: ListTile(
       dense: false,
-      onLongPress: () =>
-          _vunk(_leitudKasutajad![_indeks].tid.toString(), false),
+      onLongPress: () => _editTootaja(_leitudKasutajad![_indeks].tid),
       onTap: () => _naitaTootajaInfot(_leitudKasutajad![_indeks].tid),
       leading: AvatarPilt(
         pilt: _leitudKasutajad![_indeks].pilt,

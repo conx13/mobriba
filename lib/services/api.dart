@@ -67,10 +67,10 @@ Future getMitteAktList(int asuk) async {
 /* -------------------------------------------------------------------------- */
 /*                                  User info                                 */
 /* -------------------------------------------------------------------------- */
-Future<List<User>> getUser(int tid) async {
+Future<User> getUser(int tid) async {
   var result =
       await getData('/users/$tid').then((value) => (userFromJson(value)));
-  return result;
+  return result[0];
 }
 
 /* -------------------------------------------------------------------------- */

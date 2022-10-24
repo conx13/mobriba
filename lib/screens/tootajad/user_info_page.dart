@@ -16,7 +16,7 @@ class UserInfoPage extends StatefulWidget {
 
 class _UserInfoPageState extends State<UserInfoPage> {
   bool isLoading = false;
-  Future<List<User>>? _user;
+  Future<User>? _user;
 
 // Võtame andmebaasist tootaja andmed
   void getKasutaja() async {
@@ -43,7 +43,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              FutureBuilder<List<User>>(
+              FutureBuilder<User>(
                   future: _user,
                   builder: (BuildContext context, snapshot) {
                     if (snapshot.hasData) {
@@ -51,7 +51,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                         children: [
                           AppBar(
                             title: Text(
-                              '*${snapshot.data![0].ikood}*',
+                              '*${snapshot.data!.ikood}*',
                               style: const TextStyle(
                                   fontFamily: 'Ribakood', fontSize: 20),
                             ),
@@ -60,15 +60,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
                             height: 5,
                           ),
                           UserPilt(
-                              snapshot.data![0].pilt,
-                              snapshot.data![0].pnimi[0] +
-                                  snapshot.data![0].enimi[0],
-                              snapshot.data![0].tid),
+                              snapshot.data!.pilt,
+                              snapshot.data!.pnimi[0] + snapshot.data!.enimi[0],
+                              snapshot.data!.tid),
                           const SizedBox(
                             height: 10,
                           ),
                           Text(
-                            '${snapshot.data![0].pnimi} ${snapshot.data![0].enimi}',
+                            '${snapshot.data!.pnimi} ${snapshot.data!.enimi}',
                             style: Theme.of(context).textTheme.headlineMedium,
                           ),
                           const Padding(
@@ -77,11 +76,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
                               child: Divider()),
                           InfoRida(
                             infoLabel: 'Telefon:',
-                            infoText: snapshot.data![0].telefon,
+                            infoText: snapshot.data!.telefon,
                           ),
                           InfoRida(
                             infoLabel: 'Email:',
-                            infoText: snapshot.data![0].email,
+                            infoText: snapshot.data!.email,
                           ),
                           const Padding(
                               padding:
@@ -89,11 +88,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
                               child: Divider()),
                           InfoRida(
                             infoLabel: 'Töö grupp:',
-                            infoText: snapshot.data![0].toogruppNimi,
+                            infoText: snapshot.data!.toogruppNimi,
                           ),
                           InfoRida(
                             infoLabel: 'Aja grupp:',
-                            infoText: snapshot.data![0].ajanimi,
+                            infoText: snapshot.data!.ajanimi,
                           ),
                           const Padding(
                               padding:
@@ -101,7 +100,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                               child: Divider()),
                           InfoRida(
                             infoLabel: 'Asutus:',
-                            infoText: snapshot.data![0].firma,
+                            infoText: snapshot.data!.firma,
                           ),
                         ],
                       );

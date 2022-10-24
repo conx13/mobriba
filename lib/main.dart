@@ -1,3 +1,5 @@
+import 'package:mobriba/theme/input_dec.dart';
+
 import '../../config/custom_router.dart';
 import '../../config/route_paths.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
+        //inputDecorationTheme: MinuInputTheme().theme(),
         cardTheme: CardTheme(
           shape: RoundedRectangleBorder(
             borderRadius: const BorderRadius.all(Radius.circular(12)),
