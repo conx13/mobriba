@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import '../../models/main/tootaja_grupp.dart';
+import '../../models/main/id_nimi.dart';
 import '../../models/tootajad/user_model.dart';
 import '../../services/api.dart';
 import '../../widgets/main/text_input.dart';
@@ -32,7 +32,7 @@ class _UserPageState extends State<UserPage> {
   final TextEditingController userAegController = TextEditingController();
   String _nimeTahed = '';
   late User _user;
-  List<Tootajagrupp>? _userGrupp;
+  List<IdNimi>? _userGrupp;
   late int _selectedValue = 1;
   String _disabledUserGrupp = '';
   String _userPilt = '';
@@ -97,7 +97,7 @@ class _UserPageState extends State<UserPage> {
         _isEdit = !_isEdit;
       });
       //minuFookus.unfocus();
-      _userGrupp = await getTootajaGrupp();
+      _userGrupp = await getTootajaTooGrupp();
       minuFookus.requestFocus(); // ei funka
     }
   }
@@ -304,8 +304,8 @@ class _UserPageState extends State<UserPage> {
                                   items: _userGrupp
                                       ?.map<DropdownMenuItem<int>>((value) {
                                     return DropdownMenuItem(
-                                      value: value.toogruppId,
-                                      child: Text(value.toogruppNimi,
+                                      value: value.id,
+                                      child: Text(value.nimi,
                                           style: const TextStyle(height: 0.0)),
                                     );
                                   }).toList(),

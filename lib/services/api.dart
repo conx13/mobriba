@@ -9,7 +9,7 @@ import '../../models/otsiElementi/otsi_koodi_list_model.dart';
 import '../services/http_service.dart';
 
 import '../models/main/tana_grupid.dart';
-import '../models/main/tootaja_grupp.dart';
+import '../models/main/id_nimi.dart';
 import '../models/tootajad/user_model.dart';
 import '../models/main/aktiivsed_model.dart';
 
@@ -69,7 +69,7 @@ Future getMitteAktList(int asuk) async {
 /* -------------------------------------------------------------------------- */
 Future<User> getUser(int tid) async {
   var result =
-      await getData('/users/$tid').then((value) => (userFromJson(value)));
+      await getData('/users/user/$tid').then((value) => (userFromJson(value)));
   return result[0];
 }
 
@@ -86,11 +86,44 @@ Future getAktGrupp(String ggrupp) async {
 /* -------------------------------------------------------------------------- */
 /*                             Töötaja töö grupid                             */
 /* -------------------------------------------------------------------------- */
-Future getTootajaGrupp() async {
-  log('getTootajaGrupp', name: 'GetTootajadGrupp');
-  var result = await getData('/rkood/tootajagrupid')
-      .then((value) => tootajagruppFromJson(value));
-  //log(tootajagruppToJson(result), name: 'TOOTAJAGRUPP');
+Future getTootajaTooGrupp() async {
+  //log('getTootajaGrupp', name: 'GetTootajadGrupp');
+  var result =
+      await getData('/users/toogrupp').then((value) => idNimiFromJson(value));
+  //log(idNimiToJson(result), name: 'TOOTAJAGRUPP');
+  return result;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             Töötaja aja grupid                             */
+/* -------------------------------------------------------------------------- */
+Future getTootajaAjaGrupp() async {
+  //log('getTootajaAjaGrupp', name: 'GetTootajadAjaGrupp');
+  var result =
+      await getData('/users/ajagrupp').then((value) => idNimiFromJson(value));
+  //log(idNimiToJson(result), name: 'TOOTAJAAjaGRUPP');
+  return result;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               Töötaja asukoht                              */
+/* -------------------------------------------------------------------------- */
+Future getTootajaAsukoht() async {
+  //log('getTootajaAsukoht', name: 'GetTootajadAsukoht');
+  var result =
+      await getData('/users/asukoht').then((value) => idNimiFromJson(value));
+  //log(idNimiToJson(result), name: 'TOOTAJAAjaAsukoht');
+  return result;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Töötaja firma                               */
+/* -------------------------------------------------------------------------- */
+Future getTootajaFirma() async {
+  //log('getTootajaAsukoht', name: 'GetTootajadAsukoht');
+  var result =
+      await getData('/users/firmad').then((value) => idNimiFromJson(value));
+  //log(idNimiToJson(result), name: 'TOOTAJAAjaAsukoht');
   return result;
 }
 
