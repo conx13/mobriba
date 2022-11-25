@@ -113,7 +113,7 @@ class _OtsiKoodiFormState extends State<OtsiKoodiForm> {
                   fontSize: 0,
                 ),
                 isDense: true,
-                label: Text('Töö kood'),
+                label: Text('Elemendi/mooduli kood'),
                 hintText: '%Kood',
               ),
             ),

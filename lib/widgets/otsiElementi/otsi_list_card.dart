@@ -6,7 +6,7 @@ class OtsiListCard extends StatelessWidget {
   final int jid;
   final String tiitel;
   final String subtiitel;
-  final num kogus;
+  final num? kogus;
 
   final BuildContext context;
   const OtsiListCard(this.tulem, this.jid, this.tiitel, this.subtiitel,

@@ -5,7 +5,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mobriba/models/main/id_nimi.dart';
 import 'package:mobriba/models/tootajad/user_model.dart';
+//import 'package:mobriba/services/abiks.dart';
 import 'package:mobriba/services/api.dart';
+import 'package:mobriba/services/http_service.dart';
+import 'package:mobriba/widgets/teated.dart';
+import 'package:mobriba/widgets/tootajad/tootaja_dropbox.dart';
+import 'package:mobriba/widgets/tootajad/tootaja_textfield.dart';
 
 class TootajaEditPage extends StatefulWidget {
   final int tid;
@@ -16,19 +21,18 @@ class TootajaEditPage extends StatefulWidget {
 }
 
 class _TootajaEditPageState extends State<TootajaEditPage> {
-  late User tootaja;
-  List<IdNimi>? _userTooGrupp;
-  List<IdNimi>? _userAjaGrupp;
-  List<IdNimi>? _userAsukoht;
-  List<IdNimi>? _userFirma;
-
   final _formKey = GlobalKey<FormState>();
-  String _eTitle = '';
-  String _pTitle = '';
-  int? _userTooGruppId;
-  int? _userAjaGruppId;
-  int? _userAsukohtId;
-  int? _userFirmaId;
+  late User tootaja;
+  List<IdNimi> _userTooGrupp = [IdNimi(id: 0, nimi: 'Vali grupp')];
+  List<IdNimi>? _userAjaGrupp = [IdNimi(id: 0, nimi: 'Vali grupp')];
+  List<IdNimi>? _userAsukoht = [IdNimi(id: 0, nimi: 'Vali grupp')];
+  List<IdNimi>? _userFirma = [IdNimi(id: 0, nimi: 'Vali grupp')];
+
+  int _userTooGruppId = 0;
+  int _userAjaGruppId = 0;
+  int _userAsukohtId = 0;
+  int _userFirmaId = 0;
+  bool _aktiivne = true;
   bool _isLoading = false;
 
   final TextEditingController tootajaEnimiCont = TextEditingController();
@@ -37,36 +41,120 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
   final TextEditingController tootajaEmailCont = TextEditingController();
   final TextEditingController tootajaTelefonCont = TextEditingController();
 
-  void muudaPealkirja() {
-    _eTitle = tootajaEnimiCont.text;
-    _pTitle = tootajaPnimiCont.text;
-    setState(() {});
+//Täidame gruppide valikud
+  Future grupidInit() async {
+    try {
+      _userTooGrupp = await getTootajaTooGrupp();
+      _userAjaGrupp = await getTootajaAjaGrupp();
+      _userAsukoht = await getTootajaAsukoht();
+      _userFirma = await getTootajaFirma();
+    } catch (e) {
+      log(e.toString(), name: 'Töötaja grupid Error');
+    }
   }
 
-  void tootjaInit(int tid) async {
-    setState(() {
-      _isLoading = true;
-    });
-    tootaja = await getUser(tid);
-    _userTooGrupp = await getTootajaTooGrupp();
-    _userAjaGrupp = await getTootajaAjaGrupp();
-    _userAsukoht = await getTootajaAsukoht();
-    _userFirma = await getTootajaFirma();
+//Täidame töötja modeli
+  Future tootjaInit(int tid) async {
+    try {
+      tootaja = await getUser(tid);
+    } catch (e) {
+      log(e.toString(), name: 'Töötaja ERROR');
+    }
+  }
 
-    _eTitle = tootaja.enimi;
-    _pTitle = tootaja.pnimi;
+//Täidame vormi
+  void formInit() {
     _userTooGruppId = tootaja.toogruppId;
-    _userAjaGruppId = tootaja.ajagrupp_id;
-    _userAsukohtId = tootaja.asukoht_id;
-    _userFirmaId = tootaja.firma_id;
+    _userAjaGruppId = tootaja.ajagruppId;
+    _userAsukohtId = tootaja.asukohtId;
+    _userFirmaId = tootaja.firmaId;
     tootajaEnimiCont.text = tootaja.enimi;
     tootajaPnimiCont.text = tootaja.pnimi;
     tootajaIkoodCont.text = tootaja.ikood;
     tootajaEmailCont.text = tootaja.email;
     tootajaTelefonCont.text = tootaja.telefon;
+    _aktiivne = tootaja.aktiivne == 1;
+  }
+
+  void startInit() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await grupidInit();
+    await tootjaInit(widget.tid);
+    formInit();
     setState(() {
       _isLoading = false;
     });
+  }
+
+  void tootajaUpdate(context) async {
+    Map userUpdateMap = {};
+    String tulemus = '';
+    bool kasMuutus = false;
+    bool aktiivneKontr;
+
+    //paneme klaveri kinni
+    FocusManager.instance.primaryFocus?.unfocus();
+    //Lisame ainult need väljad mis muutunud
+    //Kui enimi või pnimi muutuvad siis muutub ka nimi
+    if (tootaja.enimi != tootajaEnimiCont.text.trim()) {
+      userUpdateMap['enimi'] = tootajaEnimiCont.text.trim();
+      kasMuutus = true;
+    }
+    if (tootaja.pnimi != tootajaPnimiCont.text) {
+      userUpdateMap['pnimi'] = tootajaPnimiCont.text.trim();
+      kasMuutus = true;
+    }
+    if (tootaja.ikood != tootajaIkoodCont.text.trim()) {
+      userUpdateMap['ikood'] = tootajaIkoodCont.text;
+      kasMuutus = true;
+    }
+    if (tootaja.telefon != tootajaTelefonCont.text.trim()) {
+      userUpdateMap['telefon'] = tootajaTelefonCont.text.trim();
+      kasMuutus = true;
+    }
+    if (tootaja.email != tootajaEmailCont.text.trim()) {
+      userUpdateMap['email'] = tootajaEmailCont.text.trim();
+      kasMuutus = true;
+    }
+    if (tootaja.ajagruppId != _userAjaGruppId) {
+      userUpdateMap['ajagupp'] = _userAjaGruppId;
+      kasMuutus = true;
+    }
+    if (tootaja.toogruppId != _userTooGruppId) {
+      userUpdateMap['toogrupp_id'] = _userTooGruppId;
+      kasMuutus = true;
+    }
+    if (tootaja.firmaId != _userFirmaId) {
+      userUpdateMap['firma_id'] = _userFirmaId;
+      kasMuutus = true;
+    }
+    if (tootaja.asukohtId != _userAsukohtId) {
+      userUpdateMap['asukoht_id'] = _userAsukohtId;
+      kasMuutus = true;
+    }
+    aktiivneKontr = (tootaja.aktiivne == 0 ? false : true);
+    if (_aktiivne != aktiivneKontr) {
+      userUpdateMap['aktiivne'] = _aktiivne ? 1 : 0;
+      kasMuutus = true;
+    }
+    if (kasMuutus) {
+      try {
+        tulemus = await updateTootaja(widget.tid, userUpdateMap);
+        await tootjaInit(widget.tid);
+        formInit();
+        setState(() {});
+        YldTeated.naita(context,
+            message: 'Töötaja andmed on muudetud', err: false);
+      } catch (e) {
+        log(e.toString(), name: 'Töötaja update error');
+        YldTeated.naita(context,
+            message: 'Midagi läks valesti! Andmeid ei muudetud!', err: true);
+      }
+    }
+
+// TODO aktiivne veel lisada
   }
 
 //Tee esimene täht suureks
@@ -115,14 +203,11 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
   @override
   void initState() {
     super.initState();
-    tootjaInit(widget.tid);
-    tootajaEnimiCont.addListener(muudaPealkirja);
-    tootajaPnimiCont.addListener(muudaPealkirja);
+    startInit();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -131,12 +216,24 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-          toolbarHeight: 80,
-          title: Row(
-            children: [
-              Flexible(child: Text('${_eTitle} ${_pTitle}')),
-            ],
-          )),
+        //toolbarHeight: 80,
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: (() => Navigator.of(context).pop()),
+          color: Theme.of(context).primaryColor,
+        ),
+        title: Text('Muuda töötajat:'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: (() {
+              tootajaUpdate(context);
+            }),
+            icon: Icon(Icons.done),
+            color: Theme.of(context).primaryColor,
+          )
+        ],
+      ),
       body: _isLoading
           ? Column(
               children: const [
@@ -166,6 +263,7 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
                             cont: tootajaEnimiCont,
                             labelTxt: 'Eesnimi:',
                             ikoon: Icons.person,
+                            aktiivne: false,
                             valid: _poleTyhiTxt,
                             inputType: TextInputType.text,
                           ),
@@ -174,17 +272,19 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
                             cont: tootajaPnimiCont,
                             labelTxt: 'Perenimi:',
                             ikoon: Icons.people,
+                            aktiivne: false,
                             valid: _poleTyhiTxt,
                             inputType: TextInputType.text,
                           ),
-                          const SizedBox(height: 20),
+                          /*            const SizedBox(height: 10),
                           TootajaTextField(
                             cont: tootajaIkoodCont,
                             labelTxt: 'Isikukood:',
                             ikoon: Icons.pin,
+                            aktiivne: false,
                             inputType: TextInputType.number,
                             valid: _poleTyhiNr,
-                          ),
+                          ), */
                           const SizedBox(height: 10),
                           TootajaTextField(
                             cont: tootajaTelefonCont,
@@ -202,7 +302,7 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
                             valid: _poleKnt,
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           TootajaValikField(
                             labelTxt: 'Töögrupp:',
@@ -215,7 +315,7 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
                               });
                             },
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 3),
                           TootajaValikField(
                             valikGruppId: _userAjaGruppId,
                             valikGrupp: _userAjaGrupp,
@@ -227,19 +327,7 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
                               });
                             },
                           ),
-                          const SizedBox(height: 5),
-                          TootajaValikField(
-                            valikGruppId: _userAsukohtId,
-                            valikGrupp: _userAsukoht,
-                            labelTxt: 'Töökoht:',
-                            ikoon: Icons.public,
-                            kuiMuutus: (val) {
-                              setState(() {
-                                _userAsukohtId = val;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 10),
                           TootajaValikField(
                             valikGruppId: _userFirmaId,
                             valikGrupp: _userFirma,
@@ -251,18 +339,46 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
                               });
                             },
                           ),
-                          const SizedBox(height: 10),
-                          ElevatedButton(
-                              onPressed: (() {
-                                if (_formKey.currentState!.validate()) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Ajagrupp - $_userAjaGruppId')),
-                                  );
-                                }
-                              }),
-                              child: const Text('Salvesta'))
+                          const SizedBox(height: 2),
+                          TootajaValikField(
+                            valikGruppId: _userAsukohtId,
+                            valikGrupp: _userAsukoht,
+                            labelTxt: 'Töökoht:',
+                            ikoon: Icons.public,
+                            kuiMuutus: (val) {
+                              setState(() {
+                                _userAsukohtId = val;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 2),
+                          Row(
+                            children: [
+                              const SizedBox(
+                                width: 90,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text('Aktiivne:'),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                child: Icon(
+                                  Icons.done,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 15,
+                                ),
+                              ),
+                              Switch(
+                                  value: _aktiivne,
+                                  onChanged: ((value) {
+                                    setState(() {
+                                      _aktiivne = !_aktiivne;
+                                    });
+                                  }))
+                            ],
+                          )
                         ],
                       ),
                     )
@@ -270,186 +386,6 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
                 ),
               ),
             ),
-    );
-  }
-}
-
-class TootajaValikField extends StatelessWidget {
-  const TootajaValikField({
-    Key? key,
-    required int? valikGruppId,
-    required List<IdNimi>? valikGrupp,
-    required String labelTxt,
-    IconData? ikoon,
-    required Function kuiMuutus,
-  })  : _valikGruppId = valikGruppId,
-        _valikGrupp = valikGrupp,
-        _labelTxt = labelTxt,
-        _ikoon = ikoon,
-        _kuiMuutus = kuiMuutus,
-        super(key: key);
-
-  final int? _valikGruppId;
-  final List<IdNimi>? _valikGrupp;
-  final String _labelTxt;
-  final IconData? _ikoon;
-  final Function _kuiMuutus;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-            width: 90,
-            child: Align(
-                alignment: Alignment.centerRight, child: Text(_labelTxt))),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2),
-          child: Icon(
-            _ikoon,
-            color: Theme.of(context).primaryColor,
-            size: 15,
-          ),
-        ),
-        Expanded(
-          child: DropdownButtonFormField(
-            hint: const Text('Vali grupp!'),
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
-              errorStyle: TextStyle(height: 0),
-              fillColor: Colors.white,
-              filled: true,
-              isDense: true,
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-            ),
-            value: _valikGruppId,
-            //disabledHint: Text(_disabledUserGrupp),
-
-            // kui on disabled, siis ei täida listi
-            onChanged: ((value) {
-              _kuiMuutus(value);
-            }),
-            //Seda näitab ekraanil
-            selectedItemBuilder: ((BuildContext context) {
-              return _valikGrupp!.map<Widget>((value) {
-                return DropdownMenuItem(
-                    value: value.id, child: Text(value.nimi));
-              }).toList();
-            }),
-            // Seda näitab listis
-            items: _valikGrupp?.map<DropdownMenuItem<int>>((value) {
-              if (value.id == _valikGruppId) {
-                return DropdownMenuItem(
-                  value: value.id,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).selectedRowColor),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(value.nimi,
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor)),
-/*                         Text('Märkus',
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: Theme.of(context).disabledColor)) */
-                      ],
-                    ),
-                  ),
-                );
-              } else {
-                return DropdownMenuItem(
-                  value: value.id,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(value.nimi),
-/*                         Text('Märkus',
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: Theme.of(context).disabledColor)) */
-                      ],
-                    ),
-                  ),
-                );
-              }
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TootajaTextField extends StatelessWidget {
-  const TootajaTextField({
-    Key? key,
-    required this.cont,
-    required this.labelTxt,
-    this.ikoon,
-    required this.valid,
-    required this.inputType,
-  }) : super(key: key);
-
-  final TextEditingController cont;
-  final String labelTxt;
-  final IconData? ikoon;
-  final String? Function(String?) valid;
-  final TextInputType inputType;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-            width: 90,
-            child:
-                Align(alignment: Alignment.centerRight, child: Text(labelTxt))),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2),
-          child: Icon(
-            ikoon,
-            color: Theme.of(context).primaryColor,
-            size: 15,
-          ),
-        ),
-        Expanded(
-          child: TextFormField(
-            controller: cont,
-            keyboardType: inputType,
-            textCapitalization: TextCapitalization.sentences,
-            validator: valid,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(10, 8, 10, 8),
-              errorStyle: TextStyle(height: 0),
-              isDense: true,
-              fillColor: Colors.white,
-              filled: true,
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

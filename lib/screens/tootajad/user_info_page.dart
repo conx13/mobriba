@@ -18,22 +18,10 @@ class _UserInfoPageState extends State<UserInfoPage> {
   bool isLoading = false;
   Future<User>? _user;
 
-// Võtame andmebaasist tootaja andmed
-  void getKasutaja() async {
-    setState(() {
-      isLoading = true;
-    });
-    //_user = await getUser(widget.tid);
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
     _user = getUser(widget.tid);
-    //getKasutaja();
   }
 
   @override
@@ -150,7 +138,7 @@ class InfoRida extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
               padding: const EdgeInsets.all(8),
               //color: Colors.white,
-              child: Text(
+              child: SelectableText(
                 infoText,
                 style: Theme.of(context)
                     .textTheme

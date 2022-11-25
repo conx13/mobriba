@@ -86,45 +86,38 @@ Future getAktGrupp(String ggrupp) async {
 /* -------------------------------------------------------------------------- */
 /*                             Töötaja töö grupid                             */
 /* -------------------------------------------------------------------------- */
-Future getTootajaTooGrupp() async {
+Future getTootajaTooGrupp() {
   //log('getTootajaGrupp', name: 'GetTootajadGrupp');
-  var result =
-      await getData('/users/toogrupp').then((value) => idNimiFromJson(value));
+  return getData('/users/toogrupp').then((value) => idNimiFromJson(value));
   //log(idNimiToJson(result), name: 'TOOTAJAGRUPP');
-  return result;
 }
 
 /* -------------------------------------------------------------------------- */
 /*                             Töötaja aja grupid                             */
 /* -------------------------------------------------------------------------- */
-Future getTootajaAjaGrupp() async {
+Future getTootajaAjaGrupp() {
   //log('getTootajaAjaGrupp', name: 'GetTootajadAjaGrupp');
-  var result =
-      await getData('/users/ajagrupp').then((value) => idNimiFromJson(value));
+  return getData('/users/ajagrupp').then((value) => idNimiFromJson(value));
   //log(idNimiToJson(result), name: 'TOOTAJAAjaGRUPP');
-  return result;
 }
 
 /* -------------------------------------------------------------------------- */
 /*                               Töötaja asukoht                              */
 /* -------------------------------------------------------------------------- */
-Future getTootajaAsukoht() async {
+Future getTootajaAsukoht() {
   //log('getTootajaAsukoht', name: 'GetTootajadAsukoht');
-  var result =
-      await getData('/users/asukoht').then((value) => idNimiFromJson(value));
+
+  return getData('/users/asukoht').then((value) => idNimiFromJson(value));
   //log(idNimiToJson(result), name: 'TOOTAJAAjaAsukoht');
-  return result;
 }
 
 /* -------------------------------------------------------------------------- */
 /*                                Töötaja firma                               */
 /* -------------------------------------------------------------------------- */
-Future getTootajaFirma() async {
+Future getTootajaFirma() {
   //log('getTootajaAsukoht', name: 'GetTootajadAsukoht');
-  var result =
-      await getData('/users/firmad').then((value) => idNimiFromJson(value));
+  return getData('/users/firmad').then((value) => idNimiFromJson(value));
   //log(idNimiToJson(result), name: 'TOOTAJAAjaAsukoht');
-  return result;
 }
 
 /* -------------------------------------------------------------------------- */

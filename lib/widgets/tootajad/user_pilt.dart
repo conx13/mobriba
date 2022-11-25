@@ -121,8 +121,8 @@ class _UserPiltState extends State<UserPilt> {
                       builder: ((context) => muudaPilti(context)));
                 }),
                 style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  fixedSize: const Size(30, 30),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  //fixedSize: const Size(25, 25),
                   side: BorderSide(
                       width: 2,
                       color: Theme.of(context).scaffoldBackgroundColor),
@@ -147,9 +147,13 @@ class _UserPiltState extends State<UserPilt> {
         style: Theme.of(context).textTheme.displayMedium,
       );
     } else {
-      return CircleAvatar(
-        radius: 60,
-        backgroundImage: NetworkImage('$url/pics/$photo', headers: httpPais),
+      return IconButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {},
+        icon: CircleAvatar(
+          radius: 60,
+          backgroundImage: NetworkImage('$url/pics/$photo', headers: httpPais),
+        ),
       );
     }
   }

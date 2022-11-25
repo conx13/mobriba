@@ -15,7 +15,7 @@ class OtsiToodGrupp {
   String lepnr;
   String too;
   int jid;
-  num kogus;
+  num? kogus;
   String gnimi;
   bool ontoos;
   bool onresult;
@@ -40,7 +40,7 @@ class OtsiToodGrupp {
         lepnr: json["LEPNR"],
         too: json["TOO"],
         jid: json["JID"],
-        kogus: json["KOGUS"],
+        kogus: json["KOGUS"] ?? 0,
         gnimi: json["GNIMI"],
         ontoos: json["ontoos"] == 0 ? false : true,
         onresult: json["onresult"] == 0 ? false : true,

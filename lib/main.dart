@@ -15,8 +15,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        colorSchemeSeed: const Color(0xff6750a4),
         useMaterial3: true,
-        //inputDecorationTheme: MinuInputTheme().theme(),
+        inputDecorationTheme: MinuInputTheme().theme(),
         cardTheme: CardTheme(
           shape: RoundedRectangleBorder(
             borderRadius: const BorderRadius.all(Radius.circular(12)),

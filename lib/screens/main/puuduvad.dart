@@ -14,15 +14,15 @@ class PuuduvadEkraan extends StatefulWidget {
   State<PuuduvadEkraan> createState() => _PuuduvadEkraanState();
 }
 
+//Et listist saad unikaalsed
 extension IterableExtension<T> on Iterable<T> {
-  Iterable<T> distinctBy(Object Function(T e) getCompareValue) {
+  List<T> distinctBy(Object Function(T e) getCompareValue) {
     var result = <T>[];
     forEach((element) {
       if (!result.any((x) => getCompareValue(x) == getCompareValue(element))) {
         result.add(element);
       }
     });
-
     return result;
   }
 }
@@ -30,6 +30,9 @@ extension IterableExtension<T> on Iterable<T> {
 class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
   late Future _tanaPoleList;
   int _asukoht = 1;
+  final List<String> _filters = [];
+  List<MitteAktiivneGrupp>? _filteredList;
+  final ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -43,7 +46,7 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
     setState(() {
       _asukoht = prefs.getInt('asukoht') ?? 1;
     });
-    //log(prefs.getInt('asukoht').toString(), name: 'mitte tööl asukoht');
+    log(prefs.getInt('asukoht').toString(), name: 'mitte tööl asukoht');
     return getMitteAktList(_asukoht);
   }
 
@@ -54,6 +57,14 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
       MaterialPageRoute(
         builder: (context) => UserInfoPage(tid),
       ),
+    );
+  }
+
+  void _scrollUp() {
+    _controller.animateTo(
+      _controller.position.minScrollExtent,
+      duration: Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
     );
   }
 
@@ -71,27 +82,76 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
           if (snapshot.hasData) {
             final puuduList =
                 snapshot.data.mitteAktGrupid as List<MitteAktiivneGrupp>;
-            //TODO Kui thta gruppe filtreerida
-            var tooGrupid = puuduList.distinctBy((e) => e.tgruppNimi);
-/*             var seen = <List<String>>{};
             List<MitteAktiivneGrupp> tooGrupid =
-                puuduList.where((t) => seen.add(t.tgruppNimi)).toList(); */
-            //log(tooGrupid.toString(), name: 'Töögrupid');
-            return Scrollbar(
-              thumbVisibility: true,
-              child: ListView.builder(
-                itemCount: puuduList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return MitteAktCard(
-                      puuduList[index].nimi,
-                      puuduList[index].enimi,
-                      puuduList[index].pnimi,
-                      puuduList[index].pilt,
-                      puuduList[index].tgruppNimi,
-                      puuduList[index].tid,
-                      naitaUserInfot);
-                },
-              ),
+                puuduList.distinctBy((e) => e.tgruppNimi);
+            if (_filters.isNotEmpty) {
+              _filteredList = puuduList
+                  .where((element) => _filters.contains(element.tgruppNimi))
+                  .toList();
+            } else {
+              _filteredList = puuduList;
+            }
+            //_controller.jumpTo(_controller.position.minScrollExtent);
+            return Column(
+              //mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 60,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      itemCount: tooGrupid.length,
+                      itemBuilder: ((context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: FilterChip(
+                            label: Text(tooGrupid[index].tgruppNimi),
+                            selected:
+                                _filters.contains(tooGrupid[index].tgruppNimi),
+                            selectedColor: Theme.of(context).errorColor,
+                            backgroundColor: Colors.green,
+                            onSelected: (selected) {
+                              setState(() {
+                                if (selected) {
+                                  _filters.add(
+                                      tooGrupid[index].tgruppNimi.toString());
+                                } else {
+                                  _filters.removeWhere((name) {
+                                    return name ==
+                                        tooGrupid[index].tgruppNimi.toString();
+                                  });
+                                }
+                                //_controller.jumpTo(_controller.position
+                                //    .minScrollExtent); //Igaksjuhuks kerime üles
+                              });
+                            },
+                          ),
+                        );
+                      })),
+                ),
+                Expanded(
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    child: ListView.builder(
+                      //controller: _controller,
+                      shrinkWrap: true,
+                      itemCount: _filteredList!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        //log('tekitame puudujate listi', name: 'Puudujate list');
+                        return MitteAktCard(
+                            _filteredList![index].nimi,
+                            _filteredList![index].enimi,
+                            _filteredList![index].pnimi,
+                            _filteredList![index].pilt,
+                            _filteredList![index].tgruppNimi,
+                            _filteredList![index].tid,
+                            naitaUserInfot);
+                      },
+                    ),
+                  ),
+                ),
+              ],
             );
           } else if (snapshot.hasError) {
             return const Center(

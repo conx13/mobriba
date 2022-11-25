@@ -16,25 +16,25 @@ class User {
     required this.pnimi,
     required this.tid,
     required this.ikood,
-    required this.ajagrupp_id,
+    required this.ajagruppId,
     required this.aktiivne,
     required this.toogruppId,
     this.telefon = '',
-    required this.toogruppNimi,
-    required this.ajanimi,
+    this.toogruppNimi = '',
+    this.ajanimi = '',
     this.pilt = '',
     required this.email,
-    required this.firma,
-    required this.firma_id,
-    required this.asukoht,
-    required this.asukoht_id,
+    this.firma = '',
+    required this.firmaId,
+    this.asukoht = '',
+    required this.asukohtId,
   });
 
   String enimi;
   String pnimi;
   int tid;
   String ikood;
-  int ajagrupp_id;
+  int ajagruppId;
   int aktiivne;
   int toogruppId;
   String telefon;
@@ -43,9 +43,9 @@ class User {
   String pilt;
   String email;
   String firma;
-  int firma_id;
+  int firmaId;
   String asukoht;
-  int asukoht_id;
+  int asukohtId;
   String get ntahed => '${enimi[0]}${pnimi[0]}';
   String get nimi => '$pnimi $enimi';
 
@@ -54,7 +54,7 @@ class User {
         pnimi: json["PNIMI"],
         tid: json["TID"],
         ikood: json["IKOOD"],
-        ajagrupp_id: json["AJAGUPP"] ?? 0,
+        ajagruppId: json["AJAGUPP"] ?? 0,
         aktiivne: json["Aktiivne"],
         toogruppId: json["toogrupp_id"] ?? 0,
         telefon: json["telefon"] ?? '',
@@ -63,9 +63,9 @@ class User {
         pilt: json["pilt"] ?? '',
         email: json['email'] ?? '',
         firma: json['firma'] ?? '',
-        firma_id: json['firma_id'] ?? 0,
+        firmaId: json['firma_id'] ?? 0,
         asukoht: json['asukoht'] ?? '',
-        asukoht_id: json['asukoht_id'] ?? 0,
+        asukohtId: json['asukoht_id'] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -73,7 +73,7 @@ class User {
         "PNIMI": pnimi,
         "TID": tid,
         "IKOOD": ikood,
-        "AJAGRUPP_ID": ajagrupp_id,
+        "AJAGRUPP_ID": ajagruppId,
         "Aktiivne": aktiivne,
         "toogrupp_id": toogruppId,
         "telefon": telefon,
@@ -82,9 +82,9 @@ class User {
         "pilt": pilt,
         'email': email,
         'firma': firma,
-        'firma_id': firma_id,
+        'firma_id': firmaId,
         'asukoht': asukoht,
-        'asukoht_id': asukoht_id,
+        'asukoht_id': asukohtId,
         'ntahed': ntahed,
         'nimi': nimi
       };
