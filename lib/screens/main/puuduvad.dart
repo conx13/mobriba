@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mobriba/screens/tootajad/user_info_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +12,7 @@ class PuuduvadEkraan extends StatefulWidget {
   State<PuuduvadEkraan> createState() => _PuuduvadEkraanState();
 }
 
-//Et listist saad unikaalsed
+//Et listist saad unikaalsed välja
 extension IterableExtension<T> on Iterable<T> {
   List<T> distinctBy(Object Function(T e) getCompareValue) {
     var result = <T>[];
@@ -30,8 +28,11 @@ extension IterableExtension<T> on Iterable<T> {
 class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
   late Future _tanaPoleList;
   int _asukoht = 1;
+  //String _kokkuPuudu = '0';
   final List<String> _filters = [];
   List<MitteAktiivneGrupp>? _filteredList;
+  List<MitteAktiivneGrupp>? _puuduList;
+  List<MitteAktiivneGrupp>? _tooGrupid;
   final ScrollController _controller = ScrollController();
 
   @override
@@ -40,13 +41,14 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
     super.initState();
   }
 
+// Võtame vaikimisi asukoha ja siis seal puudujad
   Future getAsukoht() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.reload();
     setState(() {
       _asukoht = prefs.getInt('asukoht') ?? 1;
     });
-    log(prefs.getInt('asukoht').toString(), name: 'mitte tööl asukoht');
+    // log(prefs.getInt('asukoht').toString(), name: 'mitte tööl asukoht');
     return getMitteAktList(_asukoht);
   }
 
@@ -60,70 +62,75 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
     );
   }
 
-  void _scrollUp() {
-    _controller.animateTo(
-      _controller.position.minScrollExtent,
-      duration: Duration(seconds: 2),
-      curve: Curves.fastOutSlowIn,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
         title: const Text('Hetkel mitteaktiivsed'),
+        //TODO title: Text('Hetkel mitteaktiivsed $_kokkuPuudu'),
         backgroundColor: Theme.of(context).errorColor,
       ),
       body: FutureBuilder(
         future: _tanaPoleList,
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            final puuduList =
-                snapshot.data.mitteAktGrupid as List<MitteAktiivneGrupp>;
-            List<MitteAktiivneGrupp> tooGrupid =
-                puuduList.distinctBy((e) => e.tgruppNimi);
+            // tekitame puudujate listi baasist
+            _puuduList = snapshot.data.mitteAktGrupid;
+            // tekitame töögruppide listi
+            _tooGrupid = _puuduList!.distinctBy((e) => e.tgruppNimi);
+            // Kui on valitud mõni grupp siis filtreerime välja
             if (_filters.isNotEmpty) {
-              _filteredList = puuduList
+              _filteredList = _puuduList!
                   .where((element) => _filters.contains(element.tgruppNimi))
                   .toList();
             } else {
-              _filteredList = puuduList;
+              // kui filter on tühi siis = _puuduList
+              _filteredList = _puuduList;
             }
+            //_kokkuPuudu = _filteredList!.length.toString();
+            //log('Kokku puudujaid filtris: ${_filteredList!.length}');
+            //_kokkuPuudu = _filteredList!.length.toString();
             //_controller.jumpTo(_controller.position.minScrollExtent);
             return Column(
               //mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
                   height: 60,
+                  //TODO palju lihtsam oleks võtta otse baasist jne
                   child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      itemCount: tooGrupid.length,
+                      itemCount: _tooGrupid!.length,
                       itemBuilder: ((context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(left: 5),
                           child: FilterChip(
-                            label: Text(tooGrupid[index].tgruppNimi),
-                            selected:
-                                _filters.contains(tooGrupid[index].tgruppNimi),
-                            selectedColor: Theme.of(context).errorColor,
-                            backgroundColor: Colors.green,
+                            label: Text(_tooGrupid![index].tgruppNimi),
+                            selected: _filters
+                                .contains(_tooGrupid![index].tgruppNimi),
+                            //selectedColor: Theme.of(context).errorColor,
+                            //backgroundColor: Colors.green,
                             onSelected: (selected) {
                               setState(() {
                                 if (selected) {
+                                  //kui on selected, siis puhastame listi ja märgime uue selecti
+                                  _filters.clear();
                                   _filters.add(
-                                      tooGrupid[index].tgruppNimi.toString());
+                                      _tooGrupid![index].tgruppNimi.toString());
                                 } else {
                                   _filters.removeWhere((name) {
                                     return name ==
-                                        tooGrupid[index].tgruppNimi.toString();
+                                        _tooGrupid![index]
+                                            .tgruppNimi
+                                            .toString();
                                   });
                                 }
-                                //_controller.jumpTo(_controller.position
-                                //    .minScrollExtent); //Igaksjuhuks kerime üles
+                                if (_controller.hasClients) {
+                                  _controller.jumpTo(_controller.position
+                                      .minScrollExtent); //Igaksjuhuks kerime üles
+                                }
                               });
                             },
                           ),
@@ -133,8 +140,9 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
                 Expanded(
                   child: Scrollbar(
                     thumbVisibility: true,
+                    controller: _controller,
                     child: ListView.builder(
-                      //controller: _controller,
+                      controller: _controller,
                       shrinkWrap: true,
                       itemCount: _filteredList!.length,
                       itemBuilder: (BuildContext context, int index) {

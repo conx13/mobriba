@@ -132,10 +132,10 @@ class _TootajadState extends State<Tootajad> {
               title: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(width: 40, child: Icon(Icons.search)),
-                      _asutusOtsiText == '' ? otsiText() : AsutusOtsiChip()
+                      //const SizedBox(width: 40, child: Icon(Icons.search)),
+                      otsiText()
 
                       //otsiText(),
                       ,
@@ -161,16 +161,23 @@ class _TootajadState extends State<Tootajad> {
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Chip(
-                        label: Text('Matek'),
-                        onDeleted: () {},
-                      ),
-                      Chip(
-                        label: Text('Aktiivsed'),
-                        onDeleted: () {},
-                      ),
+                      // Näitame chipi ainult kui on midagi
+                      if (_aktiivsed)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Chip(
+                            label: const Text('Aktiivsed'),
+                            backgroundColor: Colors.greenAccent,
+                            onDeleted: () {
+                              setState(() {
+                                _aktiivsed = !_aktiivsed;
+                              });
+                            },
+                          ),
+                        ),
+                      if (_asutusOtsiText != '') AsutusOtsiChip(),
                     ],
                   )
                 ],
@@ -231,6 +238,7 @@ class _TootajadState extends State<Tootajad> {
                           onChanged: ((value) {
                             setState(() {
                               _aktiivsed = !_aktiivsed;
+                              Navigator.pop(context);
                             });
                           })),
                       const Text('Aktiivsed'),
@@ -328,7 +336,7 @@ class _TootajadState extends State<Tootajad> {
   Chip AsutusOtsiChip() {
     return Chip(
       label: Text(_asutusOtsiText),
-      deleteIcon: const Icon(Icons.clear),
+      //deleteIcon: const Icon(Icons.clear),
       onDeleted: () {
         _asutusOtsiText = '';
         _otsiCont.text = '';

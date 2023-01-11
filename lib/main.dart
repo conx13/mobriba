@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           ),
           elevation: 0,
           clipBehavior: Clip.antiAlias,
-          margin: const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 4),
+          margin: const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 0),
         ),
       ),
       title: 'rKood',
