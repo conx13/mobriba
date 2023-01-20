@@ -1,11 +1,14 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:mobriba/models/main/id_nimi.dart';
 import 'package:mobriba/models/tootajad/user_model.dart';
 import 'package:mobriba/screens/tootajad/tootaja_edit_page.dart';
 import 'package:mobriba/screens/tootajad/user_info_page.dart';
 import 'package:mobriba/services/api.dart' as api;
 import 'package:mobriba/services/debouncer.dart'; //tekitab väikese viivise
+import 'package:mobriba/widgets/teated.dart';
 import 'package:mobriba/widgets/tootajad/tootjad_list_card.dart';
 
 class Tootajad extends StatefulWidget {
@@ -21,9 +24,10 @@ class _TootajadState extends State<Tootajad> {
   final _otsiCont = TextEditingController();
   bool _aktiivsed = true;
   List<User>? _leitudKasutajad = [];
+  List<IdNimi>? _leitudAsukohad = [];
   bool _otsib = false;
   //late FocusNode _myFocusNode;
-  final _debouncer = Debouncer(delay: const Duration(milliseconds: 1000));
+  //final _debouncer = Debouncer(delay: const Duration(milliseconds: 1000));
   String _asutusOtsiText = 'Matek';
 
   // Erinevate teadete näitamiseks
@@ -49,12 +53,38 @@ class _TootajadState extends State<Tootajad> {
         aktOtsi = 0;
       }
       //Otsib töötajaid:
-      _leitudKasutajad = await api.otsiTootajat(otsiText, aktOtsi);
-      setState(() {
+      try {
+        _leitudKasutajad = await api.otsiTootajat(otsiText, aktOtsi, 1);
         _otsib = false;
-      });
+        setState(() {});
+      } catch (e) {
+        _leitudKasutajad = [];
+        _otsib = false;
+        YldTeated.naita(context, message: 'Miski võrgu Error!', err: true);
+        setState(() {});
+        log(e.toString(), name: 'Otsi töötaja error!');
+        return;
+      }
+      if (!mounted) return;
+      if (_leitudKasutajad!.isEmpty) {
+        // Kui ei leidnud midagi siis teavitme
+        YldTeated.naita(context, message: 'Ei leidnud kedagi!', err: true);
+      } else {
+        // sulgme teavituse
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      }
     }
     //log(_leitudKasutajad!.length.toString(), name: 'OtsiTootajat');
+  }
+
+  void getAsukoht() async {
+    try {
+      _leitudAsukohad = await api.getTootajaAsukoht();
+      setState(() {});
+      log(_leitudAsukohad.toString());
+    } catch (e) {
+      log(e.toString(), name: 'Osti asukohti error!');
+    }
   }
 
 // Näitab töötaja infot:
@@ -79,10 +109,19 @@ class _TootajadState extends State<Tootajad> {
     );
   }
 
+  // Sulge drawer
+  void closeDrawer() async {
+    //Pidurdame natuke, et oleks näha
+    await Future.delayed(const Duration(milliseconds: 200));
+    if (!mounted) return;
+    Navigator.pop(context);
+  }
+
   @override
   void initState() {
     //_myFocusNode = FocusNode();
     super.initState();
+    getAsukoht();
     //log('töötajad aktiivne');
   }
 
@@ -108,37 +147,39 @@ class _TootajadState extends State<Tootajad> {
             bottom: AppBar(
               toolbarHeight: 100,
               actions: [
-                Container()
-                /* Builder(builder: (context) {
-                  return InkWell(
-                    onTap: () {
-                      Scaffold.of(context).openEndDrawer();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.filter_list),
-                          Text(
-                            'Filter',
-                            style: Theme.of(context).textTheme.labelSmall,
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                }), */
+                Container(),
               ],
               title: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      //const SizedBox(width: 40, child: Icon(Icons.search)),
-                      otsiText()
-
-                      //otsiText(),
-                      ,
+                      otsiText(),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // Näitame chipi ainult kui on midagi
+                      _aktiivsed
+                          ? const Padding(
+                              padding: EdgeInsets.only(right: 5),
+                              child: Chip(
+                                label: Text('Aktiivsed'),
+                                backgroundColor: Colors.greenAccent,
+                              ),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.only(right: 5),
+                              child: Chip(
+                                label: const Text('Mitte aktiivsed'),
+                                backgroundColor: Theme.of(context).errorColor,
+                                labelStyle:
+                                    const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                      if (_asutusOtsiText != '') asutusOtsiChip(),
+                      const Spacer(),
                       Builder(builder: (context) {
                         return InkWell(
                           onTap: () {
@@ -159,32 +200,13 @@ class _TootajadState extends State<Tootajad> {
                         );
                       })
                     ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // Näitame chipi ainult kui on midagi
-                      if (_aktiivsed)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: Chip(
-                            label: const Text('Aktiivsed'),
-                            backgroundColor: Colors.greenAccent,
-                            onDeleted: () {
-                              setState(() {
-                                _aktiivsed = !_aktiivsed;
-                              });
-                            },
-                          ),
-                        ),
-                      if (_asutusOtsiText != '') AsutusOtsiChip(),
-                    ],
                   )
                 ],
               ),
             ),
           ),
           SliverToBoxAdapter(
+            // Otsimise indikaator
             child: Visibility(
               visible: _otsib,
               child: const Padding(
@@ -198,6 +220,7 @@ class _TootajadState extends State<Tootajad> {
             ),
           ),
           SliverList(
+            // Otsingu tulemus
             delegate: SliverChildBuilderDelegate((context, ind) {
               return TootajadListCard(
                   leitudKasutajad: _leitudKasutajad,
@@ -215,7 +238,7 @@ class _TootajadState extends State<Tootajad> {
           padding: EdgeInsets.zero,
           children: [
             SizedBox(
-              height: 100,
+              height: 140,
               child: DrawerHeader(
                 decoration: BoxDecoration(
                   color: Theme.of(context).highlightColor,
@@ -229,6 +252,7 @@ class _TootajadState extends State<Tootajad> {
             Padding(
               padding: const EdgeInsets.only(left: 5),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -238,69 +262,35 @@ class _TootajadState extends State<Tootajad> {
                           onChanged: ((value) {
                             setState(() {
                               _aktiivsed = !_aktiivsed;
-                              Navigator.pop(context);
+                              getOtsiTootajat(_otsiCont.text);
+                              closeDrawer();
+                              //Navigator.pop(context);
                             });
                           })),
                       const Text('Aktiivsed'),
                     ],
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).selectedRowColor,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                        ),
+                  Divider(),
+                  Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text('Töökoht:'),
                       ),
-                    ),
-                    child: Row(
-                      children: const [
-                        Text('Kõik asutused'),
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _asutusOtsiText = '';
-                      setState(() {});
-                    },
+                    ],
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: const [
-                        Text('Matek'),
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _asutusOtsiText = 'Matek';
-                      setState(() {});
-                    },
+                  //Divider(),
+                  Column(
+                    children: [
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _leitudAsukohad!.length,
+                          itemBuilder: ((context, index) {
+                            return firmaValikNupp(_leitudAsukohad![index].nimi);
+                          })),
+                    ],
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        const Text('Matek'),
-                      ],
-                    ),
-                    onPressed: () {},
-                  ),
+                  Divider(),
                 ],
               ),
             ),
@@ -310,13 +300,47 @@ class _TootajadState extends State<Tootajad> {
     );
   }
 
+//Draweri nupp mis muutub vastavalt valikutele
+  TextButton firmaValikNupp(String firma) {
+    return TextButton(
+      style: firma == _asutusOtsiText
+          ? TextButton.styleFrom(
+              backgroundColor: Theme.of(context).selectedRowColor,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                ),
+              ),
+            )
+          : TextButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                ),
+              ),
+            ),
+      child: Row(
+        children: [
+          Text(firma),
+        ],
+      ),
+      onPressed: () {
+        _asutusOtsiText = firma;
+        setState(() {});
+        closeDrawer();
+      },
+    );
+  }
+
   Expanded otsiText() {
     return Expanded(
       child: TextField(
         controller: _otsiCont,
-        onChanged: (val) => _debouncer.run(() {
+/*         onChanged: (val) => _debouncer.run(() {
           getOtsiTootajat(val);
-        }),
+        }), */
         onSubmitted: getOtsiTootajat,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
@@ -326,6 +350,8 @@ class _TootajadState extends State<Tootajad> {
             icon: const Icon(Icons.clear),
             onPressed: () {
               _otsiCont.clear();
+              _leitudKasutajad!.clear();
+              setState(() {});
             },
           ),
         ),
@@ -333,15 +359,15 @@ class _TootajadState extends State<Tootajad> {
     );
   }
 
-  Chip AsutusOtsiChip() {
+  Chip asutusOtsiChip() {
     return Chip(
       label: Text(_asutusOtsiText),
       //deleteIcon: const Icon(Icons.clear),
-      onDeleted: () {
+      /* onDeleted: () {
         _asutusOtsiText = '';
         _otsiCont.text = '';
         setState(() {});
-      },
+      }, */
     );
   }
 }
