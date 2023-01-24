@@ -38,10 +38,18 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       return Column(
                         children: [
                           AppBar(
-                            title: Text(
-                              '*${snapshot.data!.ikood}*',
-                              style: const TextStyle(
-                                  fontFamily: 'Ribakood', fontSize: 20),
+                            title: Container(
+                              height: 50,
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Text(
+                                  '*${snapshot.data!.ikood}*',
+                                  style: const TextStyle(
+                                    fontFamily: 'Ribakood',
+                                    fontSize: 22,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -89,6 +97,10 @@ class _UserInfoPageState extends State<UserInfoPage> {
                           InfoRida(
                             infoLabel: 'Asutus:',
                             infoText: snapshot.data!.firma,
+                          ),
+                          InfoRida(
+                            infoLabel: 'Töökoht:',
+                            infoText: snapshot.data!.asukoht,
                           ),
                         ],
                       );

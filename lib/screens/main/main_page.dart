@@ -17,11 +17,15 @@ class _MainPageState extends State<MainPage> {
   String _tanaKokku = '0';
   String _tanaPoleKokku = '0';
   Future? _tanaToolList;
-  int _asukoht = 1;
+  final int _asukoht = 1;
   bool _otsib = false;
 
   void getData() async {
+    //TODO see vaja ümber teha valitavaks
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('asukoht', _asukoht);
+    prefs.reload;
+    log(prefs.getInt('asukoht').toString(), name: 'main asukoht');
     setState(() {
       _otsib = true;
     });
@@ -38,8 +42,6 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _otsib = false;
     });
-    prefs.setInt('asukoht', _asukoht);
-    //log(prefs.getInt('asukoht').toString(), name: 'main asukoht');
   }
 
   @override

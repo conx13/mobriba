@@ -6,10 +6,12 @@ import 'package:mobriba/models/main/id_nimi.dart';
 import 'package:mobriba/models/tootajad/user_model.dart';
 import 'package:mobriba/screens/tootajad/tootaja_edit_page.dart';
 import 'package:mobriba/screens/tootajad/user_info_page.dart';
+import 'package:mobriba/services/abiks.dart';
 import 'package:mobriba/services/api.dart' as api;
 import 'package:mobriba/services/debouncer.dart'; //tekitab väikese viivise
 import 'package:mobriba/widgets/teated.dart';
 import 'package:mobriba/widgets/tootajad/tootjad_list_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Tootajad extends StatefulWidget {
   const Tootajad({Key? key}) : super(key: key);
@@ -23,12 +25,13 @@ class _TootajadState extends State<Tootajad> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final _otsiCont = TextEditingController();
   bool _aktiivsed = true;
-  List<User>? _leitudKasutajad = [];
-  List<IdNimi>? _leitudAsukohad = [];
+  List<User> _leitudTootajad = [];
+  List<IdNimi> _leitudAsukohad = [];
   bool _otsib = false;
   //late FocusNode _myFocusNode;
   //final _debouncer = Debouncer(delay: const Duration(milliseconds: 1000));
-  String _asutusOtsiText = 'Matek';
+  String _asutusOtsiText = '';
+  int _asutusOtsiId = 0;
 
   // Erinevate teadete näitamiseks
   void teated(String txt, bool err) {
@@ -45,7 +48,7 @@ class _TootajadState extends State<Tootajad> {
     if (otsiText.isNotEmpty) {
       setState(() {
         _otsib = true;
-        //_leitudKasutajad!.clear();
+        //_leitudTootajad!.clear();
       });
       if (_aktiivsed) {
         aktOtsi = 1;
@@ -54,11 +57,12 @@ class _TootajadState extends State<Tootajad> {
       }
       //Otsib töötajaid:
       try {
-        _leitudKasutajad = await api.otsiTootajat(otsiText, aktOtsi, 1);
+        _leitudTootajad =
+            await api.otsiTootajat(otsiText, aktOtsi, _asutusOtsiId);
         _otsib = false;
         setState(() {});
       } catch (e) {
-        _leitudKasutajad = [];
+        _leitudTootajad = [];
         _otsib = false;
         YldTeated.naita(context, message: 'Miski võrgu Error!', err: true);
         setState(() {});
@@ -66,7 +70,7 @@ class _TootajadState extends State<Tootajad> {
         return;
       }
       if (!mounted) return;
-      if (_leitudKasutajad!.isEmpty) {
+      if (_leitudTootajad!.isEmpty) {
         // Kui ei leidnud midagi siis teavitme
         YldTeated.naita(context, message: 'Ei leidnud kedagi!', err: true);
       } else {
@@ -74,14 +78,22 @@ class _TootajadState extends State<Tootajad> {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
       }
     }
-    //log(_leitudKasutajad!.length.toString(), name: 'OtsiTootajat');
+    //log(_leitudTootajad!.length.toString(), name: 'OtsiTootajat');
+  }
+
+//Võtame mä
+  void vaikimisiAsukohtId() async {
+    final prefs = await SharedPreferences.getInstance();
+    _asutusOtsiId = prefs.getInt('asukoht') ?? 1;
+    log(prefs.getInt('asukoht').toString(), name: 'asukoht mälust');
   }
 
   void getAsukoht() async {
     try {
       _leitudAsukohad = await api.getTootajaAsukoht();
+      _asutusOtsiText = Abiks.findIdNimiById(_leitudAsukohad, _asutusOtsiId);
       setState(() {});
-      log(_leitudAsukohad.toString());
+      log(_asutusOtsiText, name: 'Leitud asukoha text');
     } catch (e) {
       log(e.toString(), name: 'Osti asukohti error!');
     }
@@ -121,6 +133,7 @@ class _TootajadState extends State<Tootajad> {
   void initState() {
     //_myFocusNode = FocusNode();
     super.initState();
+    vaikimisiAsukohtId();
     getAsukoht();
     //log('töötajad aktiivne');
   }
@@ -223,16 +236,16 @@ class _TootajadState extends State<Tootajad> {
             // Otsingu tulemus
             delegate: SliverChildBuilderDelegate((context, ind) {
               return TootajadListCard(
-                  leitudKasutajad: _leitudKasutajad,
+                  leitudKasutajad: _leitudTootajad,
                   indeks: ind,
                   editTootaja: ((tid) => editTootaja(tid)),
                   naitaTootajaInfot: (int tid) => naitaUserInfot(tid));
-            }, childCount: _leitudKasutajad?.length ?? 0),
+            }, childCount: _leitudTootajad.length ?? 0),
           ),
         ],
       ),
       endDrawer: SizedBox(
-        width: 200,
+        width: 150,
         child: Drawer(
             child: ListView(
           padding: EdgeInsets.zero,
@@ -270,7 +283,7 @@ class _TootajadState extends State<Tootajad> {
                       const Text('Aktiivsed'),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   Row(
                     children: const [
                       Padding(
@@ -286,11 +299,12 @@ class _TootajadState extends State<Tootajad> {
                           shrinkWrap: true,
                           itemCount: _leitudAsukohad!.length,
                           itemBuilder: ((context, index) {
-                            return firmaValikNupp(_leitudAsukohad![index].nimi);
+                            return firmaValikNupp(_leitudAsukohad[index].nimi,
+                                _leitudAsukohad[index].id);
                           })),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                 ],
               ),
             ),
@@ -301,9 +315,9 @@ class _TootajadState extends State<Tootajad> {
   }
 
 //Draweri nupp mis muutub vastavalt valikutele
-  TextButton firmaValikNupp(String firma) {
+  TextButton firmaValikNupp(String asutus, int id) {
     return TextButton(
-      style: firma == _asutusOtsiText
+      style: asutus == _asutusOtsiText
           ? TextButton.styleFrom(
               backgroundColor: Theme.of(context).selectedRowColor,
               shape: const RoundedRectangleBorder(
@@ -323,12 +337,14 @@ class _TootajadState extends State<Tootajad> {
             ),
       child: Row(
         children: [
-          Text(firma),
+          Text(asutus),
         ],
       ),
       onPressed: () {
-        _asutusOtsiText = firma;
+        _asutusOtsiText = asutus;
+        _asutusOtsiId = id;
         setState(() {});
+        getOtsiTootajat(_otsiCont.text);
         closeDrawer();
       },
     );
@@ -350,7 +366,7 @@ class _TootajadState extends State<Tootajad> {
             icon: const Icon(Icons.clear),
             onPressed: () {
               _otsiCont.clear();
-              _leitudKasutajad!.clear();
+              _leitudTootajad.clear();
               setState(() {});
             },
           ),
