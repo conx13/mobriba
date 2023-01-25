@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mobriba/models/main/id_nimi.dart';
@@ -8,7 +7,7 @@ import 'package:mobriba/screens/tootajad/tootaja_edit_page.dart';
 import 'package:mobriba/screens/tootajad/user_info_page.dart';
 import 'package:mobriba/services/abiks.dart';
 import 'package:mobriba/services/api.dart' as api;
-import 'package:mobriba/services/debouncer.dart'; //tekitab väikese viivise
+//import 'package:mobriba/services/debouncer.dart'; //tekitab väikese viivise
 import 'package:mobriba/widgets/teated.dart';
 import 'package:mobriba/widgets/tootajad/tootjad_list_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +21,7 @@ class Tootajad extends StatefulWidget {
 
 class _TootajadState extends State<Tootajad> {
   //bool otsib = false;
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
+  //final GlobalKey<ScaffoldState> _key = GlobalKey();
   final _otsiCont = TextEditingController();
   bool _aktiivsed = true;
   List<User> _leitudTootajad = [];
@@ -70,7 +69,7 @@ class _TootajadState extends State<Tootajad> {
         return;
       }
       if (!mounted) return;
-      if (_leitudTootajad!.isEmpty) {
+      if (_leitudTootajad.isEmpty) {
         // Kui ei leidnud midagi siis teavitme
         YldTeated.naita(context, message: 'Ei leidnud kedagi!', err: true);
       } else {
@@ -240,7 +239,7 @@ class _TootajadState extends State<Tootajad> {
                   indeks: ind,
                   editTootaja: ((tid) => editTootaja(tid)),
                   naitaTootajaInfot: (int tid) => naitaUserInfot(tid));
-            }, childCount: _leitudTootajad.length ?? 0),
+            }, childCount: _leitudTootajad.length),
           ),
         ],
       ),
@@ -297,7 +296,7 @@ class _TootajadState extends State<Tootajad> {
                     children: [
                       ListView.builder(
                           shrinkWrap: true,
-                          itemCount: _leitudAsukohad!.length,
+                          itemCount: _leitudAsukohad.length,
                           itemBuilder: ((context, index) {
                             return firmaValikNupp(_leitudAsukohad[index].nimi,
                                 _leitudAsukohad[index].id);

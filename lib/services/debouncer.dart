@@ -2,7 +2,7 @@ import 'dart:async';
 
 class Debouncer {
   final Duration delay;
-  late Timer _timer = Timer(Duration(milliseconds: 1000), () {});
+  late Timer _timer = Timer(const Duration(milliseconds: 1000), () {});
 
   Debouncer({required this.delay});
 

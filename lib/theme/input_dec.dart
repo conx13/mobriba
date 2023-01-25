@@ -10,7 +10,7 @@ class MinuInputTheme {
 
   OutlineInputBorder _buildBorder(Color color) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
       borderSide: BorderSide(color: color, width: 1.0),
       //borderSide: BorderSide.none,
     );

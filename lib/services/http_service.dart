@@ -10,9 +10,9 @@ import 'dart:convert';
 //String url = 'http://10.0.30.154:3000/api'; //Matek Raspeberry;
 //String url = 'http://10.0.30.192:3000/api'; //Matek Wifi
 //String url = 'http://10.0.30.147:3000/api'; //Matek local;
-String url = 'http://192.168.1.135:3000/api'; //Kodus
+//String url = 'http://192.168.1.135:3000/api'; //Kodus
 //String url = 'http://192.168.8.100:3000/api/rkood/$data';
-//String url = 'http://192.168.1.138:3000/api/rkood/$data';
+String url = 'http://10.0.30.139:3000/api'; //wifi 5G
 
 //Ajutiselt aktiveerin basicauth, et natuke oleks turvalisem
 String username = 'matek';
@@ -32,10 +32,10 @@ Map<String, String> httpPais = {
 /*                             Tavaline GET päring                            */
 /* -------------------------------------------------------------------------- */
 Future getData(String data) async {
-  //log(Uri.parse(Uri.encodeFull('$url$data')).toString(), name: 'HTTP url:');
+  log(Uri.parse(Uri.encodeFull('$url$data')).toString(), name: 'HTTP url:');
   final response =
       await get(Uri.parse(Uri.encodeFull('$url$data')), headers: httpPais)
-          .timeout(const Duration(seconds: 40),
+          .timeout(const Duration(seconds: 20),
               onTimeout: () => Response('Timeout', 408));
   //log(response.body.toString(), name: 'HTTP service:');
   if (response.statusCode == 200) {

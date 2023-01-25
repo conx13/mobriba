@@ -38,7 +38,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       return Column(
                         children: [
                           AppBar(
-                            title: Container(
+                            title: SizedBox(
                               height: 50,
                               child: FittedBox(
                                 fit: BoxFit.fill,

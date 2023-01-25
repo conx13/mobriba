@@ -18,7 +18,7 @@ class _MainPageState extends State<MainPage> {
   String _tanaPoleKokku = '0';
   Future? _tanaToolList;
   final int _asukoht = 1;
-  bool _otsib = false;
+  //bool _otsib = false;
 
   void getData() async {
     //TODO see vaja ümber teha valitavaks
@@ -26,9 +26,6 @@ class _MainPageState extends State<MainPage> {
     await prefs.setInt('asukoht', _asukoht);
     prefs.reload;
     log(prefs.getInt('asukoht').toString(), name: 'main asukoht');
-    setState(() {
-      _otsib = true;
-    });
     await getTanaTool(_asukoht).then((value) {
       if (value.isNotEmpty) {
         _tanaKokku = value.first.tulem.toString();
@@ -39,9 +36,6 @@ class _MainPageState extends State<MainPage> {
         _tanaPoleKokku = value.first.tulem.toString();
       }
     }));
-    setState(() {
-      _otsib = false;
-    });
   }
 
   @override

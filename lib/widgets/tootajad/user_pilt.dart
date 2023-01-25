@@ -194,7 +194,7 @@ class _UserPiltState extends State<UserPilt> {
           icon: const Icon(Icons.camera),
           label: const Text('Muuda'),
           style: TextButton.styleFrom(
-              primary: Theme.of(context).primaryColor,
+              foregroundColor: Theme.of(context).primaryColor,
               side: BorderSide(color: Theme.of(context).primaryColor)),
         ),
         TextButton.icon(
@@ -205,7 +205,7 @@ class _UserPiltState extends State<UserPilt> {
           icon: const Icon(Icons.delete),
           label: const Text('Kustuta'),
           style: TextButton.styleFrom(
-              primary: Theme.of(context).errorColor,
+              foregroundColor: Theme.of(context).errorColor,
               side: BorderSide(color: Theme.of(context).errorColor)),
         )
       ],

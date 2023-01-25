@@ -7,7 +7,7 @@ import 'package:mobriba/models/main/id_nimi.dart';
 import 'package:mobriba/models/tootajad/user_model.dart';
 //import 'package:mobriba/services/abiks.dart';
 import 'package:mobriba/services/api.dart';
-import 'package:mobriba/services/http_service.dart';
+//import 'package:mobriba/services/http_service.dart';
 import 'package:mobriba/widgets/teated.dart';
 import 'package:mobriba/widgets/tootajad/tootaja_dropbox.dart';
 import 'package:mobriba/widgets/tootajad/tootaja_textfield.dart';
@@ -90,7 +90,7 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
 
   void tootajaUpdate(context) async {
     Map userUpdateMap = {};
-    String tulemus = '';
+    //String tulemus = '';
     bool kasMuutus = false;
     bool aktiivneKontr;
 
@@ -141,7 +141,7 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
     }
     if (kasMuutus) {
       try {
-        tulemus = await updateTootaja(widget.tid, userUpdateMap);
+        //tulemus = await updateTootaja(widget.tid, userUpdateMap);
         await tootjaInit(widget.tid);
         formInit();
         setState(() {});
@@ -184,7 +184,7 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
   }
 
 // TODO tekita siis ID kontroll
-  String? _poleTyhiNr(String? value) {
+/*   String? _poleTyhiNr(String? value) {
     String pattern = r"^[0-9]*$";
     RegExp regExp = RegExp(pattern);
     if (value!.isEmpty) {
@@ -194,7 +194,7 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
     } else {
       return null;
     }
-  }
+  } */
 
   String? _poleKnt(String? value) {
     return null;
@@ -218,18 +218,18 @@ class _TootajaEditPageState extends State<TootajaEditPage> {
       appBar: AppBar(
         //toolbarHeight: 80,
         leading: IconButton(
-          icon: Icon(Icons.close),
+          icon: const Icon(Icons.close),
           onPressed: (() => Navigator.of(context).pop()),
           color: Theme.of(context).primaryColor,
         ),
-        title: Text('Muuda töötajat:'),
+        title: const Text('Muuda töötajat:'),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: (() {
               tootajaUpdate(context);
             }),
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
             color: Theme.of(context).primaryColor,
           )
         ],
