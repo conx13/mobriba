@@ -70,6 +70,7 @@ class _PuuduvadEkraanState extends State<PuuduvadEkraan> {
         title: const Text('Hetkel mitteaktiivsed'),
         //TODO title: Text('Hetkel mitteaktiivsed $_kokkuPuudu'),
         backgroundColor: Theme.of(context).errorColor,
+        foregroundColor: Colors.white,
       ),
       body: FutureBuilder(
         future: _tanaPoleList,

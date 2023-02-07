@@ -58,23 +58,26 @@ class OtsiListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: kaardiVarv(),
-      child: ListTile(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ElemendiInfoPage(jid)),
-          );
-        },
-        dense: false,
-        leading: Column(
-            mainAxisAlignment: MainAxisAlignment.center, children: [ikoon()]),
-        title: Text(tiitel),
-        // Kui võtta el nimetus välja:
-        //title: Text(_otsiTulem[index].too.split('_').last),
-        subtitle: Text(subtiitel),
-        trailing: Text('$kogus m2'),
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: Card(
+        shape: kaardiVarv(),
+        child: ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ElemendiInfoPage(jid)),
+            );
+          },
+          dense: false,
+          leading: Column(
+              mainAxisAlignment: MainAxisAlignment.center, children: [ikoon()]),
+          title: Text(tiitel),
+          // Kui võtta el nimetus välja:
+          //title: Text(_otsiTulem[index].too.split('_').last),
+          subtitle: Text(subtiitel),
+          trailing: Text('$kogus m2'),
+        ),
       ),
     );
   }

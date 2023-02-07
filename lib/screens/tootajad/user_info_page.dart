@@ -46,7 +46,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                   '*${snapshot.data!.ikood}*',
                                   style: const TextStyle(
                                     fontFamily: 'Ribakood',
-                                    fontSize: 22,
+                                    //fontSize: 30,
                                   ),
                                 ),
                               ),

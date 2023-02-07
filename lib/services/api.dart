@@ -153,6 +153,17 @@ Future<List<OtsiToodGrupp>> otsiTood(
 }
 
 /* -------------------------------------------------------------------------- */
+/*                               Otsi ribakoodi                               */
+/* -------------------------------------------------------------------------- */
+
+Future<List<OtsiToodGrupp>> otsiRibakoodi(String ribakood) async {
+  var result = await getData('/rkood/otsiRibakoodi/$ribakood')
+      .then((value) => otsiToodGruppFromJson(value));
+  //log(otsiToodGruppToJson(result), name: 'OTSI TOOD');
+  return result;
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                  KES TEGI                                  */
 /* -------------------------------------------------------------------------- */
 Future<List<KesTegi>> kesTegi(int jid) async {

@@ -31,11 +31,14 @@ class _MainPageState extends State<MainPage> {
         _tanaKokku = value.first.tulem.toString();
       }
     });
-    await getTanaPoleTool(_asukoht).then(((value) {
-      if (value.isNotEmpty) {
-        _tanaPoleKokku = value.first.tulem.toString();
-      }
-    }));
+    await getTanaPoleTool(_asukoht).then(
+      ((value) {
+        if (value.isNotEmpty) {
+          _tanaPoleKokku = value.first.tulem.toString();
+        }
+      }),
+    );
+    setState(() {});
   }
 
   @override

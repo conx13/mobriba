@@ -36,9 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   http_parser: ^4.0.1
   http: ^0.13.5
-  intl: ^0.17.0
+  intl: ^0.18.0
   image_picker: ^0.8.5+3
   shared_preferences: ^2.0.15
+  mobile_scanner: ^2.1.0
+  flutter_speed_dial: ^6.2.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +84,9 @@ flutter:
     - family: Ribakood
       fonts:
         - asset: fonts/Ribakood_uus.ttf
+    - family: FWIcon
+      fonts:
+        - asset: fonts/FWIcon.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

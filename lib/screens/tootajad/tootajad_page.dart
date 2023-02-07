@@ -174,20 +174,18 @@ class _TootajadState extends State<Tootajad> {
                     children: [
                       // Näitame chipi ainult kui on midagi
                       _aktiivsed
-                          ? const Padding(
+                          ? Padding(
                               padding: EdgeInsets.only(right: 5),
                               child: Chip(
                                 label: Text('Aktiivsed'),
-                                backgroundColor: Colors.greenAccent,
+                                backgroundColor: Colors.lightGreen[200],
                               ),
                             )
                           : Padding(
                               padding: const EdgeInsets.only(right: 5),
                               child: Chip(
                                 label: const Text('Mitte aktiivsed'),
-                                backgroundColor: Theme.of(context).errorColor,
-                                labelStyle:
-                                    const TextStyle(color: Colors.white),
+                                backgroundColor: Colors.deepOrange[200],
                               ),
                             ),
                       if (_asutusOtsiText != '') asutusOtsiChip(),

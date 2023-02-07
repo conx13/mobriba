@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class OtsiKoodiForm extends StatefulWidget {
   final Function(String otsiLeping, String otsiKood, bool element) otsi;
-  const OtsiKoodiForm(this.otsi, {Key? key}) : super(key: key);
+  final String? qrKoodText;
+  const OtsiKoodiForm(this.otsi, this.qrKoodText, {Key? key}) : super(key: key);
 
   @override
   State<OtsiKoodiForm> createState() => _OtsiKoodiFormState();
@@ -41,8 +42,8 @@ class _OtsiKoodiFormState extends State<OtsiKoodiForm> {
       FocusScope.of(context).unfocus();
       final prefs = await SharedPreferences.getInstance();
       // Salvestame päringu kohalikku
-      prefs.setString('otsiLeping', _otsiLepingCont.text.trim());
-      prefs.setString('otsiToo', kustutaProtsent(_otsiJobCont.text.trim()));
+      await prefs.setString('otsiLeping', _otsiLepingCont.text.trim());
+      //prefs.setString('otsiToo', kustutaProtsent(_otsiJobCont.text.trim()));
     } else {
       log('Miksit valest', name: 'NuppOtsi error');
     }
@@ -52,7 +53,7 @@ class _OtsiKoodiFormState extends State<OtsiKoodiForm> {
   Future loeAndmeid() async {
     final prefs = await SharedPreferences.getInstance();
     _otsiLepingCont.text = (prefs.getString('otsiLeping') ?? '');
-    _otsiJobCont.text = (prefs.getString('otsiToo') ?? '');
+    //_otsiJobCont.text = (prefs.getString('otsiToo') ?? '');
   }
 
 //Kontrollime kas on ok
@@ -75,6 +76,7 @@ class _OtsiKoodiFormState extends State<OtsiKoodiForm> {
 
   @override
   Widget build(BuildContext context) {
+    _otsiJobCont.text = widget.qrKoodText!;
     return Form(
       key: _otsiFormKey,
       child: Padding(
