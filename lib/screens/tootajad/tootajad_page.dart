@@ -37,7 +37,7 @@ class _TootajadState extends State<Tootajad> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(txt),
       backgroundColor: err
-          ? Theme.of(context).errorColor
+          ? Theme.of(context).colorScheme.error
           : Theme.of(context).snackBarTheme.backgroundColor,
     ));
   }
@@ -175,9 +175,9 @@ class _TootajadState extends State<Tootajad> {
                       // Näitame chipi ainult kui on midagi
                       _aktiivsed
                           ? Padding(
-                              padding: EdgeInsets.only(right: 5),
+                              padding: const EdgeInsets.only(right: 5),
                               child: Chip(
-                                label: Text('Aktiivsed'),
+                                label: const Text('Aktiivsed'),
                                 backgroundColor: Colors.lightGreen[200],
                               ),
                             )
@@ -255,7 +255,7 @@ class _TootajadState extends State<Tootajad> {
                 ),
                 child: Text(
                   'Filter:',
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context).textTheme.displaySmall,
                 ),
               ),
             ),
