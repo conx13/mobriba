@@ -153,8 +153,9 @@ class _UserPageState extends State<UserPage> {
                                   ),
                                   Text(
                                     '${userEnimeController.text} ${userPnimeController.text}',
-                                    style:
-                                        Theme.of(context).textTheme.headline5,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall,
                                   ),
                                 ],
                               ),

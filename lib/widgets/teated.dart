@@ -17,8 +17,9 @@ class YldTeated {
           Text(message),
         ],
       ),
-      backgroundColor:
-          err ? Theme.of(context).errorColor : Theme.of(context).primaryColor,
+      backgroundColor: err
+          ? Theme.of(context).colorScheme.error
+          : Theme.of(context).primaryColor,
     ));
   }
 }

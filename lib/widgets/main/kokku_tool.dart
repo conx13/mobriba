@@ -30,7 +30,7 @@ class KokkuTool extends StatelessWidget {
                   children: [
                     Text(
                       'Aktiivsed:',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
                       aktiivsedKokku,
@@ -64,7 +64,7 @@ class KokkuTool extends StatelessWidget {
                     children: [
                       Text(
                         'Mitteaktiivsed:',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(
                         mitteAktiivsedKokku,
@@ -73,7 +73,7 @@ class KokkuTool extends StatelessWidget {
                             .displaySmall!
                             .copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).errorColor),
+                                color: Theme.of(context).colorScheme.error),
                       ),
                     ],
                   ),

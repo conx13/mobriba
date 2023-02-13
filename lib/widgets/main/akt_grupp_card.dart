@@ -44,7 +44,7 @@ class AktGruppCard extends StatelessWidget {
         ),
         title: Text(
           '$enimi $pnimi',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

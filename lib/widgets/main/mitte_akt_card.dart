@@ -26,7 +26,7 @@ class MitteAktCard extends StatelessWidget {
         leading: AvatarPilt(
             pilt: pilt,
             tahed: enimi[0] + pnimi[0],
-            varv: Theme.of(context).errorColor),
+            varv: Theme.of(context).colorScheme.error),
         title: Text(nimi),
         subtitle: Text(grupp),
       ),

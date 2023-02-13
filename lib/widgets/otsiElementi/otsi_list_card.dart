@@ -30,7 +30,7 @@ class OtsiListCard extends StatelessWidget {
       default:
         return RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(12)),
-          side: BorderSide(color: Theme.of(context).errorColor),
+          side: BorderSide(color: Theme.of(context).colorScheme.error),
         );
     }
   }

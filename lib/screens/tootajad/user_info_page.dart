@@ -154,7 +154,7 @@ class InfoRida extends StatelessWidget {
                 infoText,
                 style: Theme.of(context)
                     .textTheme
-                    .headline6!
+                    .titleLarge!
                     .copyWith(fontSize: 16),
               ),
             ),

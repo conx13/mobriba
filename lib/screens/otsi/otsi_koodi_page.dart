@@ -1,13 +1,13 @@
-import 'dart:developer';
+//import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:mobriba/screens/otsi/otsi_ribakoodi_form.dart';
+//import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+//import 'package:mobriba/screens/otsi/otsi_ribakoodi_form.dart';
 import 'package:mobriba/screens/otsi/ribakood_page.dart';
 import 'package:mobriba/widgets/f_w_icon_icons.dart';
 //import 'package:mobriba/screens/otsi/ribakood_page.dart';
 import '../../models/otsiElementi/otsi_koodi_list_model.dart';
-import '../../widgets/otsiElementi/otsi_koodi_form.dart';
+//import '../../widgets/otsiElementi/otsi_koodi_form.dart';
 import '../../widgets/otsiElementi/otsi_list_card.dart';
 
 import '../../services/api.dart' as api;
@@ -23,7 +23,7 @@ class _OtsiKoodiPageState extends State<OtsiKoodiPage> {
   bool _isOtsib = false;
   List<OtsiToodGrupp> _otsiTulem = [];
   String _ribakoodTextField = '';
-  String _skanniQrKood = '';
+  //String _skanniQrKood = '';
 
 // Erinevate teadete näitamiseks
   teated(String txt, bool err) {
@@ -41,7 +41,6 @@ class _OtsiKoodiPageState extends State<OtsiKoodiPage> {
       _otsiTulem = [];
       _isOtsib = true;
     });
-    //final prefs = await SharedPreferences.getInstance();
     try {
       _otsiTulem = await api.otsiTood(leping, too, element);
       if (_otsiTulem.isEmpty) {
@@ -69,11 +68,13 @@ class _OtsiKoodiPageState extends State<OtsiKoodiPage> {
       _otsiTulem = await api.otsiRibakoodi(ribakood);
       if (_otsiTulem.isEmpty) {
         teated('Kahjuks ei leidnud sellist ribakoodi!', true);
+        _ribakoodTextField = '';
       }
       _isOtsib = false;
       setState(() {});
     } catch (e) {
       teated('Meil on probleeme!', true);
+      _ribakoodTextField = '';
       setState(() {
         _isOtsib = false;
       });
@@ -98,6 +99,8 @@ class _OtsiKoodiPageState extends State<OtsiKoodiPage> {
         otsiRibakoodi(tulem['kood'].toString());
       } else {
         teated('Kahjuks vale formaat', true);
+        _otsiTulem.clear();
+        _ribakoodTextField = '';
       }
     });
   }
@@ -116,56 +119,40 @@ class _OtsiKoodiPageState extends State<OtsiKoodiPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            //title: const Text('Otsi koodi'),
-            title: Text('Otsi koodi: $_ribakoodTextField'),
-            backgroundColor: BottomAppBarTheme.of(context).color,
-            actions: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.manage_search))
-            ],
-            bottom: PreferredSize(
-              preferredSize: const Size(0, 100),
-              child: Column(
-                children: [
-                  OtsiRibakoodiForm(otsiRibakoodi, _ribakoodTextField),
-                  OtsiKoodiForm(otsiElementi, _skanniQrKood),
-                ],
-              ),
-            )),
-        body: _isOtsib
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                shrinkWrap: true,
-                itemCount: _otsiTulem.length,
-                itemBuilder: ((context, index) {
-                  return OtsiListCard(
-                      _otsiTulem[index].tulem,
-                      _otsiTulem[index].jid,
-                      _otsiTulem[index].too,
-                      _otsiTulem[index].lepnr,
-                      _otsiTulem[index].kogus,
-                      context);
-                })),
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            // QR koodi nupp
-            FloatingActionButton(
-              backgroundColor: Colors.lightGreen[100],
-              onPressed: () => {},
-              heroTag: null,
-              child: const Icon(Icons.qr_code_2),
+      appBar: AppBar(
+        //title: const Text('Otsi koodi'),
+        title: Text('Otsi koodi: $_ribakoodTextField'),
+        //backgroundColor: BottomAppBarTheme.of(context).color,
+        //Paneme ajutiselt kinni
+        /*  bottom: PreferredSize(
+            preferredSize: const Size(0, 100),
+            child: Column(
+              children: [
+                OtsiRibakoodiForm(otsiRibakoodi, _ribakoodTextField),
+                OtsiKoodiForm(otsiElementi, _skanniQrKood),
+              ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            //Ribakoodi nupp
-            FloatingActionButton(
-              onPressed: () => _nuppRibakood(),
-              heroTag: null,
-              child: const Icon(FWIcon.barcode),
-            )
-          ],
-        ));
+          ), */
+      ),
+      body: _isOtsib
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount: _otsiTulem.length,
+              itemBuilder: ((context, index) {
+                return OtsiListCard(
+                    _otsiTulem[index].tulem,
+                    _otsiTulem[index].jid,
+                    _otsiTulem[index].too,
+                    _otsiTulem[index].lepnr,
+                    _otsiTulem[index].kogus,
+                    context);
+              })),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _nuppRibakood(),
+        heroTag: null,
+        child: const Icon(FWIcon.barcode),
+      ),
+    );
   }
 }

@@ -50,7 +50,7 @@ class _ElemendiInfoState extends State<ElemendiInfoPage> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(txt),
       backgroundColor: err
-          ? Theme.of(context).errorColor
+          ? Theme.of(context).colorScheme.error
           : Theme.of(context).snackBarTheme.backgroundColor,
     ));
   }

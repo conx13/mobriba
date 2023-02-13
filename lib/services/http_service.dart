@@ -7,11 +7,11 @@ import 'dart:convert';
 /*                          Kogu HTTP päringute jaoks                         */
 /* -------------------------------------------------------------------------- */
 
-//String url = 'http://10.0.30.154:3000/api'; //Matek Raspeberry;
+String url = 'http://10.0.30.154:3000/api'; //Matek Raspeberry;
 //String url = 'http://10.0.30.192:3000/api'; //Matek Wifi
 //String url = 'http://10.0.30.147:3000/api'; //Matek local;
 //String url = 'http://localhost:3000/api'; //Matek local;
-String url = 'http://192.168.1.135:3000/api'; //Kodus
+//String url = 'http://192.168.1.135:3000/api'; //Kodus
 //String url = 'http://192.168.8.100:3000/api/rkood/$data';
 //String url = 'http://10.0.30.139:3000/api'; //wifi 5G
 

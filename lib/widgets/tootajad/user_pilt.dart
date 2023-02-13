@@ -30,7 +30,7 @@ class _UserPiltState extends State<UserPilt> {
 // Negatiivne teade
   negSnackBar(String teade) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: Theme.of(context).errorColor,
+      backgroundColor: Theme.of(context).colorScheme.error,
       content: Text(teade),
     ));
   }
@@ -205,8 +205,8 @@ class _UserPiltState extends State<UserPilt> {
           icon: const Icon(Icons.delete),
           label: const Text('Kustuta'),
           style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).errorColor,
-              side: BorderSide(color: Theme.of(context).errorColor)),
+              foregroundColor: Theme.of(context).colorScheme.error,
+              side: BorderSide(color: Theme.of(context).colorScheme.error)),
         )
       ],
     );

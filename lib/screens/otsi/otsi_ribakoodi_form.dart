@@ -1,7 +1,7 @@
-import 'dart:developer';
+//import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:mobriba/screens/otsi/ribakood_page.dart';
+//import 'package:mobriba/screens/otsi/ribakood_page.dart';
 
 class OtsiRibakoodiForm extends StatefulWidget {
   final Function(String ribakood) otsiRibakoodi;

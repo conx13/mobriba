@@ -39,13 +39,13 @@ class AktiivsedList extends StatelessWidget {
                     child: Text(
                       //'100',
                       aktlist[index].kokku.toString(),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                 ),
                 title: Text(
                   aktlist[index].gnimi,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             );

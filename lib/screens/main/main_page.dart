@@ -60,7 +60,7 @@ class _MainPageState extends State<MainPage> {
                 // TODO võta pealkiri firmade tabelist jne
                 Text(
                   'Pärnu tootmine:',
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ]),
               //PaisAeg(), //Paneme paika kellaja
